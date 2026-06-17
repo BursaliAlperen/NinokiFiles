@@ -236,11 +236,15 @@
     <span id="alert-text" class="font-semibold"></span>
   </div>
   
-  <!-- REKLAM YÜKLENİYOR EKRANI -->
+  <!-- REKLAM YÜKLENİYOR / BEKLEME EKRANI (GARANTİLİ ÖDÜL İÇİN) -->
   <div id="ad-loading-screen" class="hidden fixed inset-0 z-[99999] bg-black/95 flex flex-col items-center justify-center p-4 text-center">
     <div class="ad-loader mb-4"></div>
-    <h2 class="text-white font-bold text-lg mb-2">Requesting Ad campaign...</h2>
-    <p class="text-emerald-400 text-xs">Complete the sponsor video playback to claim balance.</p>
+    <h2 class="text-white font-bold text-lg mb-2">Displaying Advertisement...</h2>
+    <p class="text-emerald-400 text-xs">Please wait. Do not close this window.</p>
+    <!-- Geri Sayım Göstergesi -->
+    <div class="mt-6 bg-slate-900 px-4 py-2 rounded-full border border-slate-700">
+      <span class="text-white font-mono font-bold" id="ad-timer">12</span><span class="text-slate-400 text-xs ml-1">seconds left</span>
+    </div>
   </div>
 
   <!-- ALT NAVİGASYON MENÜSÜ -->
@@ -502,9 +506,13 @@
       window.showNotification("🗑️ File permanently deleted.");
     };
 
-    // 3. RICHADS REKLAM GÖSTERİMİ VE BAKİYE ÖDÜLÜ ($0.002)
+    // 3. GARANTİLİ REKLAM İZLEME VE BAKİYE ÖDÜLÜ ($0.002) - 12 SANİYE KURALI
+    let adWatchInProgress = false; // Aynı anda birden fazla tıklamayı önler
+
     const adButton = document.getElementById('ad-button');
     adButton.addEventListener('click', () => {
+      if (adWatchInProgress) return; // Zaten izliyorsa basmasını engelle
+
       const today = new Date().toDateString();
       let watched = window.currentUserData.dailyAdsWatched || 0;
       
@@ -513,27 +521,50 @@
       
       if (watched >= 100) { window.showNotification("⚠️ Daily limit reached! 100/100"); return; }
 
-      // Reklam yükleme ekranı gösterimi
-      document.getElementById('ad-loading-screen').classList.remove('hidden');
-      
-      // RichAds Interstitial Video API Çağrısı
-      window.richadsController.triggerInterstitialVideo().then(async (result) => {
-        // Reklam Başarıyla Tamamlandı
-        document.getElementById('ad-loading-screen').classList.add('hidden');
-        
-        const ref = doc(db, 'artifacts', DB_APP_ID, 'users', window.userUid, 'profile', 'data');
-        await updateDoc(ref, {
-          balance: Number((window.currentUserData.balance + 0.002).toFixed(6)), // Kazanç 0.002$ olarak güncellendi!
-          dailyAdsWatched: watched + 1,
-          lastAdWatchedDate: today
-        });
-        window.showNotification("🎉 Reward +$0.0020 added!");
+      adWatchInProgress = true;
 
-      }).catch((error) => {
-        // Reklam Erken Kapatıldı Veya Hata Oluştu
-        document.getElementById('ad-loading-screen').classList.add('hidden');
-        window.showNotification("⚠️ Ad skipped. Play ad fully to claim credit.");
-      });
+      // 1. Reklam yükleme kilit ekranı gösterimi başlar
+      const loadingScreen = document.getElementById('ad-loading-screen');
+      const timerDisplay = document.getElementById('ad-timer');
+      loadingScreen.classList.remove('hidden');
+      
+      let timeLeft = 12; // 12 Saniye kuralı
+      timerDisplay.textContent = timeLeft;
+
+      // 2. RichAds Interstitial Video API Çağrısı Arkaplanda Tetiklenir (Hatalara karşı bağımsız çalışır)
+      try {
+        window.richadsController.triggerInterstitialVideo().catch(() => {
+          console.warn("RichAds API caught an internal error, continuing with fallback timer.");
+        });
+      } catch (err) {
+        console.warn("RichAds Trigger skipped:", err);
+      }
+
+      // 3. Garantili Zamanlayıcı (Timer) - RichAds yanıtından bağımsız olarak süreyi tutar
+      const countdownInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          
+          // 12 saniye dolduğunda kilit ekranını kapat ve ödülü ver!
+          loadingScreen.classList.add('hidden');
+          adWatchInProgress = false;
+
+          const ref = doc(db, 'artifacts', DB_APP_ID, 'users', window.userUid, 'profile', 'data');
+          updateDoc(ref, {
+            balance: Number((window.currentUserData.balance + 0.002).toFixed(6)), // Kazanç 0.002$ olarak kesin verildi
+            dailyAdsWatched: watched + 1,
+            lastAdWatchedDate: today
+          }).then(() => {
+            window.showNotification("🎉 Reward +$0.0020 added!");
+          }).catch((err) => {
+            console.error("Ödül tanımlanamadı:", err);
+            window.showNotification("❌ Reward system error.");
+          });
+        }
+      }, 1000); // Her 1 saniyede bir çalışır
     });
 
     // SİSTEMİ BAŞLAT
@@ -553,7 +584,11 @@
             
             // Kullanıcı Mağazada Gezerken Arada Bir Interstitial Banner Çıkarması (%20 ihtimal)
             if(tabName === 'store' && Math.random() < 0.2) {
-                if(window.richadsController) window.richadsController.triggerInterstitialBanner().catch(()=>{});
+                if(window.richadsController) {
+                  try {
+                    window.richadsController.triggerInterstitialBanner().catch(()=>{});
+                  } catch(e) {}
+                }
             }
           } else {
             tabEl.classList.add('hidden');
@@ -582,5 +617,6 @@
   </script>
 </body>
 </html>
+
 
 ```

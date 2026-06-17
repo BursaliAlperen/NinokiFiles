@@ -118,10 +118,10 @@
       </div>
 
       <div id="files-list" class="grid grid-cols-1 gap-4">
-        <!-- Skeleton Loader -->
+        <!-- Loader / Status State -->
         <div class="text-center py-12 glass-panel rounded-3xl">
           <i class="fa-solid fa-circle-notch fa-spin text-blue-500 text-2xl mb-3"></i>
-          <p class="text-sm text-gray-400">Sistem dosyaları yükleniyor...</p>
+          <p class="text-sm text-gray-400">Retrieving secure cloud vault...</p>
         </div>
       </div>
     </div>
@@ -205,40 +205,40 @@
           <div class="p-2 bg-red-500/20 rounded-lg"><i class="fa-solid fa-shield-halved text-red-400"></i></div>
           <h3 class="text-sm font-bold text-red-400 uppercase tracking-widest">Admin Control</h3>
         </div>
-        <p class="text-xs text-gray-400">Dosya ekleme ve silme işlemlerini buradan yönetebilirsin.</p>
+        <p class="text-xs text-gray-400">Publish cloud files, define packages, and monitor vault listings.</p>
       </div>
 
       <!-- Add File -->
       <div class="glass-panel rounded-3xl p-6">
-        <h4 class="text-sm font-bold text-white mb-5 flex items-center gap-2"><i class="fa-solid fa-plus text-blue-400"></i> Yeni Dosya Ekle</h4>
+        <h4 class="text-sm font-bold text-white mb-5 flex items-center gap-2"><i class="fa-solid fa-plus text-blue-400"></i> Publish New File</h4>
         <div class="space-y-4">
           <div>
-            <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">Dosya Başlığı</label>
-            <input type="text" id="admin-file-name" placeholder="Örn: Premium Archive v2" class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+            <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">File Title</label>
+            <input type="text" id="admin-file-name" placeholder="e.g., Premium Archive v2" class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
           </div>
           <div>
-            <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">İndirme Linki (URL)</label>
+            <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">Download Link (URL)</label>
             <input type="url" id="admin-file-url" placeholder="https://dropbox.com/..." class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">Fiyat ($)</label>
+              <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">Price ($)</label>
               <input type="number" step="0.001" id="admin-file-price" placeholder="0.10" class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
             </div>
             <div>
-              <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">İndirimli (Ops.)</label>
-              <input type="number" step="0.001" id="admin-file-discount" placeholder="Boş bırakılabilir" class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+              <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">Discount Price (Optional)</label>
+              <input type="number" step="0.001" id="admin-file-discount" placeholder="Discount price" class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
             </div>
           </div>
         </div>
         <button onclick="publishFile()" id="publishBtn" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm py-4 rounded-2xl transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] active:scale-95 flex justify-center items-center gap-2">
-          <i class="fa-solid fa-cloud-arrow-up"></i> Dosyayı Yayınla
+          <i class="fa-solid fa-cloud-arrow-up"></i> Publish File Package
         </button>
       </div>
 
       <!-- Manage Files -->
       <div class="glass-panel rounded-3xl p-6">
-        <h4 class="text-xs font-bold uppercase text-gray-400 tracking-widest mb-4">Aktif Dosyalar</h4>
+        <h4 class="text-xs font-bold uppercase text-gray-400 tracking-widest mb-4">Active System Packages</h4>
         <div id="admin-files-list" class="space-y-3"></div>
       </div>
     </div>
@@ -261,43 +261,43 @@
     </button>
   </nav>
 
-  <!-- YENİ BİLDİRİM TOAST EKRANI (PREMIUM) -->
+  <!-- PREMIUM TOAST NOTIFICATION CONTAINER -->
   <div id="toast-container" class="fixed top-20 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 w-full max-w-sm px-4 pointer-events-none"></div>
 
-  <!-- ONAY MODALI (EMİN MİSİN POPUP'I) -->
+  <!-- ARE YOU SURE MODAL (DELETE CONFIRMATION) -->
   <div id="confirm-modal" class="hidden fixed inset-0 z-[1000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-5 opacity-0 transition-opacity duration-300">
     <div id="confirm-box" class="bg-panelLighter border border-white/10 rounded-3xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300">
       <div class="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-4">
         <i class="fa-solid fa-triangle-exclamation text-3xl text-red-500"></i>
       </div>
-      <h3 class="text-xl font-bold text-center text-white mb-2">Emin misin?</h3>
-      <p id="confirm-modal-text" class="text-sm text-gray-400 text-center mb-8">Bu dosyayı silmek üzeresin. Bu işlem geri alınamaz.</p>
+      <h3 class="text-xl font-bold text-center text-white mb-2">Are you sure?</h3>
+      <p id="confirm-modal-text" class="text-sm text-gray-400 text-center mb-8">You are about to delete this file. This action cannot be undone.</p>
       <div class="flex gap-3">
-        <button onclick="closeConfirmModal()" class="flex-1 bg-black/50 border border-white/10 text-white font-bold py-3.5 rounded-2xl hover:bg-white/5 transition active:scale-95">İptal</button>
-        <button onclick="executeDelete()" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-2xl shadow-[0_0_15px_rgba(220,38,38,0.3)] transition active:scale-95">Evet, Sil</button>
+        <button onclick="closeConfirmModal()" class="flex-1 bg-black/50 border border-white/10 text-white font-bold py-3.5 rounded-2xl hover:bg-white/5 transition active:scale-95">Cancel</button>
+        <button onclick="executeDelete()" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-2xl shadow-[0_0_15px_rgba(220,38,38,0.3)] transition active:scale-95">Yes, Delete</button>
       </div>
     </div>
   </div>
   
-  <!-- REKLAM BEKLEME EKRANI -->
+  <!-- SPONSOR ADS RUNNING SCREEN -->
   <div id="ad-loading-screen" class="hidden fixed inset-0 z-[99999] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-5 text-center">
     <div class="ad-loader mb-6"></div>
-    <h2 class="text-white font-bold text-xl mb-2">Sponsor Reklamı Yükleniyor</h2>
-    <p class="text-green-400 text-sm font-medium">Lütfen bekleyin, bu pencereyi kapatmayın.</p>
+    <h2 class="text-white font-bold text-xl mb-2">Displaying Sponsor Campaign</h2>
+    <p class="text-green-400 text-sm font-medium">Please wait. Keep this window open to receive rewards.</p>
     <div class="mt-8 bg-black/50 px-6 py-3 rounded-2xl border border-white/10 flex items-center gap-3">
       <i class="fa-regular fa-clock text-gray-400"></i>
       <span class="text-white font-mono font-bold text-lg" id="ad-timer">12</span>
-      <span class="text-gray-400 text-xs font-medium">saniye kaldı</span>
+      <span class="text-gray-400 text-xs font-medium">seconds remaining</span>
     </div>
   </div>
 
-  <!-- SCRIPT BÖLÜMÜ -->
+  <!-- SCRIPT SYSTEM MODULE -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
     import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, addDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
-    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
-    // RICHADS KONTROLCÜ BAŞLATMA
+    // Initialize RichAds
     window.richadsController = new window.TelegramAdsController();
     window.richadsController.initialize({
         pubId: "988708",
@@ -305,27 +305,33 @@
         debug: false
     });
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyChSJa8aBjUwDcM7IFr_iuNMe7PwqhfK3k",
-      authDomain: "ninokifiles.firebaseapp.com",
-      projectId: "ninokifiles",
-      storageBucket: "ninokifiles.firebasestorage.app",
-      messagingSenderId: "210076686120",
-      appId: "1:210076686120:web:10773a358aa9a2989e221d"
-    };
+    // CRITICAL: Robust Dynamic Firebase Setup matching Canvas Rules
+    let firebaseConfig;
+    if (typeof __firebase_config !== 'undefined') {
+      firebaseConfig = JSON.parse(__firebase_config);
+    } else {
+      firebaseConfig = {
+        apiKey: "AIzaSyChSJa8aBjUwDcM7IFr_iuNMe7PwqhfK3k",
+        authDomain: "ninokifiles.firebaseapp.com",
+        projectId: "ninokifiles",
+        storageBucket: "ninokifiles.firebasestorage.app",
+        messagingSenderId: "210076686120",
+        appId: "1:210076686120:web:10773a358aa9a2989e221d"
+      };
+    }
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
-    const DB_APP_ID = "ninokifiles";
+    const DB_APP_ID = typeof __app_id !== 'undefined' ? __app_id : "ninokifiles";
     const ADMIN_ID = "7904032877";
 
     window.currentUserData = { balance: 0.0, dailyAdsWatched: 0, lastAdWatchedDate: "", unlockedFiles: [] };
     window.dbFiles = [];
     window.userUid = null; 
-    window.itemToDelete = null; // Silinecek dosyanın ID'sini tutar
+    window.itemToDelete = null; 
 
-    // Premium Toast Bildirim Sistemi
+    // Premium Toast Alerts
     window.showNotification = function(msg, type = 'info') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
@@ -340,7 +346,6 @@
       
       container.appendChild(toast);
       
-      // Animasyon tetikle
       requestAnimationFrame(() => {
         toast.style.transform = 'translateY(0)';
         toast.style.opacity = '1';
@@ -353,9 +358,27 @@
       }, 3500);
     };
 
+    // Initialize Auth Session following Strict Rules
+    async function initAuthSession() {
+      try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch (err) {
+        console.warn("Authentication initialization error, attempting anonymous fallback:", err);
+        try {
+          await signInAnonymously(auth);
+        } catch (subErr) {
+          console.error("Critical: Auth system down.", subErr);
+        }
+      }
+    }
+
     async function startApp() {
       let tgUserId = null;
-      let tgName = "Ghost User";
+      let tgName = "Telegram User";
 
       try {
         if (window.Telegram && window.Telegram.WebApp) {
@@ -370,13 +393,15 @@
           }
         }
       } catch (e) {
-        console.warn("Telegram bulunamadı");
+        console.warn("Telegram container interface not active.");
       }
 
-      try { await signInAnonymously(auth); } catch (err) {}
+      await initAuthSession();
 
       onAuthStateChanged(auth, async (user) => {
-        window.userUid = tgUserId ? tgUserId : (user ? user.uid : "fallback_user_123");
+        if (!user) return; // Prevent unauthorized data queries
+        
+        window.userUid = tgUserId ? tgUserId : user.uid;
         
         document.getElementById('profile-id').textContent = `ID: ${window.userUid}`;
         document.getElementById('profile-name').textContent = tgName;
@@ -385,6 +410,7 @@
           document.getElementById('nav-admin').classList.remove('hidden');
         }
 
+        // Fetch User profile doc inside /artifacts/{appId}/users/{userId}/{collectionName}
         const userDocRef = doc(db, 'artifacts', DB_APP_ID, 'users', window.userUid, 'profile', 'data');
         onSnapshot(userDocRef, async (docSnap) => {
           const today = new Date().toDateString();
@@ -401,17 +427,21 @@
             await setDoc(userDocRef, window.currentUserData, { merge: true });
           }
           syncUI();
-          renderFiles(); // Bakiye/kilit durumuna göre dosyaları tekrar render et
-        }, (err) => console.warn(err));
+          renderFiles();
+        }, (err) => console.warn("Firestore snapshot error:", err));
 
+        // Fetch Public Shared Files Collection following rule 1 & rule 2
         const filesColRef = collection(db, 'artifacts', DB_APP_ID, 'public', 'data', 'files');
         onSnapshot(filesColRef, (snap) => {
           window.dbFiles = [];
           snap.forEach(d => window.dbFiles.push({ id: d.id, ...d.data() }));
-          // ZAMAN/TARİH SIRALAMASI: En son eklenen en üstte
+          // JavaScript Memory Sorting (Adheres to Rule 2 - No complex order queries)
           window.dbFiles.sort((a,b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
           renderFiles();
-        }, (err) => console.warn(err));
+        }, (err) => {
+          console.error("Unable to load public catalog:", err);
+          window.showNotification("Database communication fault.", "error");
+        });
       });
     }
 
@@ -422,21 +452,30 @@
       document.getElementById('profile-unlocked-count').textContent = `${(data.unlockedFiles || []).length}`;
       
       const count = data.dailyAdsWatched || 0;
-      document.getElementById('daily-ads-text').textContent = `${count} / 100 İzlenen`;
+      document.getElementById('daily-ads-text').textContent = `${count} / 100 Watched`;
       document.getElementById('daily-ads-bar').style.width = `${(count / 100) * 100}%`;
     }
 
-    // Dosyaları Ekrana Çizen Geliştirilmiş Fonksiyon
     function renderFiles() {
       const storeDiv = document.getElementById('files-list');
       const adminDiv = document.getElementById('admin-files-list');
       const unlockedDiv = document.getElementById('unlocked-files-list');
       
-      document.getElementById('store-count').textContent = `${window.dbFiles.length} packages`;
+      document.getElementById('store-count').textContent = `${window.dbFiles.length} files`;
 
+      // AAA No Files Available Fallback
       if (window.dbFiles.length === 0) {
-        storeDiv.innerHTML = `<div class="text-center py-12 glass-panel rounded-3xl"><i class="fa-solid fa-folder-open text-gray-600 text-3xl mb-3"></i><p class="text-sm text-gray-400">Henüz dosya yüklenmedi.</p></div>`;
-        adminDiv.innerHTML = `<div class="bg-black/30 p-4 rounded-2xl border border-white/5 text-center"><p class="text-xs text-gray-500">Sistemde dosya yok.</p></div>`;
+        const noFilesPlaceholder = `
+          <div class="text-center py-16 glass-panel rounded-3xl animate-fade-in">
+            <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/10">
+              <i class="fa-solid fa-box-open text-gray-500 text-2xl animate-pulse"></i>
+            </div>
+            <h4 class="text-white font-bold text-base mb-1">No files available currently</h4>
+            <p class="text-xs text-gray-500 max-w-xs mx-auto px-4">There are no files shared in the vault at this moment. Please check back later.</p>
+          </div>
+        `;
+        storeDiv.innerHTML = noFilesPlaceholder;
+        adminDiv.innerHTML = `<div class="bg-black/30 p-4 rounded-2xl border border-white/5 text-center"><p class="text-xs text-gray-500">No uploads present.</p></div>`;
         unlockedDiv.innerHTML = `<div class="text-center py-6 bg-black/20 rounded-2xl border border-white/5"><p class="text-xs text-gray-500">You haven't unlocked any files yet.</p></div>`;
         return;
       }
@@ -468,7 +507,7 @@
               </div>
               <div>
                 ${isUnlocked 
-                  ? `<button onclick="copyToClipboard('${f.url}')" class="bg-white text-black font-bold text-xs px-5 py-2.5 rounded-xl flex items-center space-x-2 transition active:scale-95"><i class="fa-regular fa-copy"></i><span>Kopyala</span></button>` 
+                  ? `<button onclick="copyToClipboard('${f.url}')" class="bg-white text-black font-bold text-xs px-5 py-2.5 rounded-xl flex items-center space-x-2 transition active:scale-95"><i class="fa-regular fa-copy"></i><span>Copy URL</span></button>` 
                   : `<button onclick="buyFile('${f.id}', ${activePrice})" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl flex items-center space-x-2 transition shadow-[0_0_15px_rgba(37,99,235,0.3)] active:scale-95"><i class="fa-solid fa-unlock"></i><span>Unlock</span></button>`}
               </div>
             </div>
@@ -492,7 +531,7 @@
             <div class="bg-black/50 p-4 rounded-2xl border border-white/5 flex justify-between items-center">
               <div class="min-w-0 pr-4">
                 <p class="text-sm font-bold text-gray-200 truncate">${f.name}</p>
-                <p class="text-[10px] text-blue-400 mt-0.5">Fiyat: $${f.price}</p>
+                <p class="text-[10px] text-blue-400 mt-0.5">Price: $${f.price}</p>
               </div>
               <button onclick="openConfirmModal('${f.id}', '${f.name.replace(/'/g, "\\'")}')" class="bg-red-500/10 text-red-400 p-3 rounded-xl hover:bg-red-500 hover:text-white transition active:scale-95 border border-red-500/20"><i class="fa-regular fa-trash-can"></i></button>
             </div>`;
@@ -512,22 +551,22 @@
       }
     }
 
-    // SATIN ALMA
+    // Purchase Processing Logic
     window.buyFile = async (fileId, price) => {
-      if (window.currentUserData.balance < price) { window.showNotification("Yetersiz bakiye! Lütfen reklam izleyerek kredi kazanın.", "error"); return; }
+      if (window.currentUserData.balance < price) { window.showNotification("Insufficient balance! Watch ads to earn more credits.", "error"); return; }
       try {
         const ref = doc(db, 'artifacts', DB_APP_ID, 'users', window.userUid, 'profile', 'data');
         await updateDoc(ref, {
           balance: Number((window.currentUserData.balance - price).toFixed(6)),
           unlockedFiles: [...(window.currentUserData.unlockedFiles || []), fileId]
         });
-        window.showNotification("🎉 Dosya başarıyla açıldı! Profil sekmesine bak.", "success");
+        window.showNotification("🎉 Dropbox link unlocked! Check your Profile tab.", "success");
       } catch (err) {
-        window.showNotification("Satın alma sırasında bir hata oluştu.", "error");
+        window.showNotification("Transaction failed. Try again.", "error");
       }
     };
 
-    // ADMİN: DOSYA EKLEME (Try-Catch İle Hata Tespiti)
+    // Correct Admin Package Upload (Adheres to Strict Rule 1 paths)
     window.publishFile = async () => {
       const btn = document.getElementById('publishBtn');
       const name = document.getElementById('admin-file-name').value.trim();
@@ -536,15 +575,17 @@
       const discount = document.getElementById('admin-file-discount').value ? Number(document.getElementById('admin-file-discount').value) : null;
 
       if (!name || !url || isNaN(price)) { 
-        window.showNotification("Lütfen başlık, link ve fiyat alanlarını doldur.", "error"); 
+        window.showNotification("Please fill in file title, link, and price.", "error"); 
         return; 
       }
       
       try {
-        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...`;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Publishing...`;
         btn.disabled = true;
 
-        await addDoc(collection(db, 'artifacts', DB_APP_ID, 'public', 'data', 'files'), {
+        // Path structure matches `/artifacts/{appId}/public/data/{collectionName}`
+        const collectionRef = collection(db, 'artifacts', DB_APP_ID, 'public', 'data', 'files');
+        await addDoc(collectionRef, {
           name, 
           url, 
           price, 
@@ -552,26 +593,25 @@
           createdAt: new Date().toISOString()
         });
         
-        window.showNotification("✅ Dosya başarıyla sisteme eklendi!", "success");
+        window.showNotification("✅ File successfully published to database!", "success");
         
-        // Formu temizle
         document.getElementById('admin-file-name').value = ''; 
         document.getElementById('admin-file-url').value = '';
         document.getElementById('admin-file-price').value = '';
         document.getElementById('admin-file-discount').value = '';
       } catch(err) {
-        console.error("Ekleme Hatası:", err);
-        window.showNotification("Hata: Dosya eklenemedi! Yetki sorunu olabilir.", "error");
+        console.error("Database Save Error:", err);
+        window.showNotification(`Upload Error! Reason: ${err.message}`, "error");
       } finally {
-        btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Dosyayı Yayınla`;
+        btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Publish File Package`;
         btn.disabled = false;
       }
     };
 
-    // ONAY MODALI AÇMA
+    // Open Confirmation Dialog
     window.openConfirmModal = (fileId, fileName) => {
       window.itemToDelete = fileId;
-      document.getElementById('confirm-modal-text').innerHTML = `<b>${fileName}</b> dosyasını silmek istediğine emin misin?`;
+      document.getElementById('confirm-modal-text').innerHTML = `Are you sure you want to delete <b>${fileName}</b>?`;
       
       const modal = document.getElementById('confirm-modal');
       const box = document.getElementById('confirm-box');
@@ -583,7 +623,7 @@
       });
     };
 
-    // ONAY MODALI KAPATMA
+    // Close Confirmation Dialog
     window.closeConfirmModal = () => {
       window.itemToDelete = null;
       const modal = document.getElementById('confirm-modal');
@@ -597,7 +637,7 @@
       }, 300);
     };
 
-    // ADMİN: DOSYA SİLME (Modal Onaylandıktan Sonra)
+    // Delete Process Execution
     window.executeDelete = async () => {
       if(!window.itemToDelete) return;
       const id = window.itemToDelete;
@@ -605,14 +645,14 @@
 
       try {
         await deleteDoc(doc(db, 'artifacts', DB_APP_ID, 'public', 'data', 'files', id));
-        window.showNotification("🗑️ Dosya kalıcı olarak silindi.", "success");
+        window.showNotification("🗑️ File successfully deleted.", "success");
       } catch(err) {
-        console.error("Silme Hatası:", err);
-        window.showNotification("Silme başarısız! Yetki hatası.", "error");
+        console.error("Delete Action Failed:", err);
+        window.showNotification("Deletion failed. Try again.", "error");
       }
     };
 
-    // REKLAM İZLEME VE BAKİYE KAZANMA
+    // Sponsor Ad View Timer Logic
     let adWatchInProgress = false;
 
     document.getElementById('ad-button').addEventListener('click', () => {
@@ -621,7 +661,7 @@
       const today = new Date().toDateString();
       let watched = window.currentUserData.dailyAdsWatched || 0;
       if (window.currentUserData.lastAdWatchedDate !== today) watched = 0;
-      if (watched >= 100) { window.showNotification("Günlük izleme limitine (100) ulaştınız!", "error"); return; }
+      if (watched >= 100) { window.showNotification("Daily ad viewing limit reached!", "error"); return; }
 
       adWatchInProgress = true;
       const loadingScreen = document.getElementById('ad-loading-screen');
@@ -648,19 +688,18 @@
             dailyAdsWatched: watched + 1,
             lastAdWatchedDate: today
           }).then(() => {
-            window.showNotification("Tebrikler! +$0.0020 kazandın.", "success");
+            window.showNotification("Success! Reward +$0.0020 added.", "success");
           }).catch((err) => {
-            window.showNotification("Ödül verilirken hata oluştu.", "error");
+            window.showNotification("Failed to assign reward.", "error");
           });
         }
       }, 1000);
     });
 
-    // UYGULAMAYI BAŞLAT
     startApp();
   </script>
 
-  <!-- TAB GEÇİŞLERİ VE KOPYALAMA ARAÇLARI -->
+  <!-- TAB NAVIGATION LOGIC -->
   <script>
     function switchTab(tabName) {
       ['store', 'earn', 'profile', 'admin'].forEach(tab => {
@@ -689,7 +728,7 @@
       el.value = text; document.body.appendChild(el);
       el.select(); document.execCommand('copy');
       document.body.removeChild(el);
-      window.showNotification("Link panoya kopyalandı!", "success");
+      window.showNotification("URL copied to clipboard!", "success");
     };
   </script>
 </body>

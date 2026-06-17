@@ -114,11 +114,11 @@
 
       <div class="flex items-center justify-between px-1">
         <h3 class="text-sm font-bold text-gray-300">Available Packages</h3>
-        <span id="store-count" class="text-xs text-blue-400 font-semibold bg-blue-500/10 px-3 py-1 rounded-full">0 files</span>
+        <span id="store-count" class="text-xs text-blue-400 font-semibold bg-blue-500/10 px-3 py-1 rounded-full">Loading...</span>
       </div>
 
       <div id="files-list" class="grid grid-cols-1 gap-4">
-        <!-- Loader / Status State -->
+        <!-- Loader State -->
         <div class="text-center py-12 glass-panel rounded-3xl">
           <i class="fa-solid fa-circle-notch fa-spin text-blue-500 text-2xl mb-3"></i>
           <p class="text-sm text-gray-400">Retrieving secure cloud vault...</p>
@@ -305,12 +305,10 @@
         debug: false
     });
 
-    // CRITICAL: Robust Dynamic Firebase Setup matching Canvas Rules
+    // 1. Dynamic Config Parsing (Guaranteed not to crash)
     let firebaseConfig;
-    if (typeof __firebase_config !== 'undefined') {
-      firebaseConfig = JSON.parse(__firebase_config);
-    } else {
-      firebaseConfig = {
+    try {
+      firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
         apiKey: "AIzaSyChSJa8aBjUwDcM7IFr_iuNMe7PwqhfK3k",
         authDomain: "ninokifiles.firebaseapp.com",
         projectId: "ninokifiles",
@@ -318,17 +316,19 @@
         messagingSenderId: "210076686120",
         appId: "1:210076686120:web:10773a358aa9a2989e221d"
       };
+    } catch (e) {
+      console.error("Config parse failed, using fallback.");
     }
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
-    const DB_APP_ID = typeof __app_id !== 'undefined' ? __app_id : "ninokifiles";
-    const ADMIN_ID = "7904032877";
+    const appId = typeof __app_id !== 'undefined' ? __app_id : "ninokifiles";
+    const ADMIN_TELEGRAM_ID = "7904032877";
 
     window.currentUserData = { balance: 0.0, dailyAdsWatched: 0, lastAdWatchedDate: "", unlockedFiles: [] };
     window.dbFiles = [];
-    window.userUid = null; 
+    window.tgId = null; // Save telegram ID separately
     window.itemToDelete = null; 
 
     // Premium Toast Alerts
@@ -358,26 +358,7 @@
       }, 3500);
     };
 
-    // Initialize Auth Session following Strict Rules
-    async function initAuthSession() {
-      try {
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-          await signInWithCustomToken(auth, __initial_auth_token);
-        } else {
-          await signInAnonymously(auth);
-        }
-      } catch (err) {
-        console.warn("Authentication initialization error, attempting anonymous fallback:", err);
-        try {
-          await signInAnonymously(auth);
-        } catch (subErr) {
-          console.error("Critical: Auth system down.", subErr);
-        }
-      }
-    }
-
     async function startApp() {
-      let tgUserId = null;
       let tgName = "Telegram User";
 
       try {
@@ -388,7 +369,7 @@
           tg.setHeaderColor('#050505');
           tg.setBackgroundColor('#050505');
           if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            tgUserId = String(tg.initDataUnsafe.user.id);
+            window.tgId = String(tg.initDataUnsafe.user.id);
             tgName = tg.initDataUnsafe.user.first_name + " " + (tg.initDataUnsafe.user.last_name || "");
           }
         }
@@ -396,22 +377,39 @@
         console.warn("Telegram container interface not active.");
       }
 
-      await initAuthSession();
+      // 2. Auth First (Mandatory Rules)
+      const initAuth = async () => {
+        try {
+          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+            await signInWithCustomToken(auth, __initial_auth_token);
+          } else {
+            await signInAnonymously(auth);
+          }
+        } catch (err) {
+          console.error("Auth init error:", err);
+          await signInAnonymously(auth); // Final fallback
+        }
+      };
+      await initAuth();
 
+      // 3. Database operations ONLY after auth
       onAuthStateChanged(auth, async (user) => {
-        if (!user) return; // Prevent unauthorized data queries
+        if (!user) return; // Guard clause
         
-        window.userUid = tgUserId ? tgUserId : user.uid;
+        // IMPORTANT FIX: We MUST use user.uid for database paths, not Telegram ID to prevent Permission Denied.
+        const userId = user.uid; 
         
-        document.getElementById('profile-id').textContent = `ID: ${window.userUid}`;
+        document.getElementById('profile-id').textContent = `ID: ${window.tgId ? window.tgId : userId.substring(0,8)}`;
         document.getElementById('profile-name').textContent = tgName;
 
-        if (window.userUid === ADMIN_ID) {
+        // Verify Admin Status
+        if (window.tgId === ADMIN_TELEGRAM_ID || userId === ADMIN_TELEGRAM_ID) {
           document.getElementById('nav-admin').classList.remove('hidden');
         }
 
-        // Fetch User profile doc inside /artifacts/{appId}/users/{userId}/{collectionName}
-        const userDocRef = doc(db, 'artifacts', DB_APP_ID, 'users', window.userUid, 'profile', 'data');
+        // Fetch User profile using strict path: /artifacts/{appId}/users/{userId}/{collectionName}
+        const userDocRef = doc(db, 'artifacts', appId, 'users', userId, 'profile', 'main');
+        
         onSnapshot(userDocRef, async (docSnap) => {
           const today = new Date().toDateString();
           if (docSnap.exists()) {
@@ -423,24 +421,32 @@
               window.currentUserData = data;
             }
           } else {
-            window.currentUserData = { balance: 0.0, dailyAdsWatched: 0, lastAdWatchedDate: today, unlockedFiles: [] };
+            window.currentUserData = { 
+              balance: 0.0, 
+              dailyAdsWatched: 0, 
+              lastAdWatchedDate: today, 
+              unlockedFiles: [],
+              tgName: tgName // Save TG data inside the doc, not as the doc ID
+            };
             await setDoc(userDocRef, window.currentUserData, { merge: true });
           }
           syncUI();
           renderFiles();
-        }, (err) => console.warn("Firestore snapshot error:", err));
+        }, (err) => {
+          console.error("Error reading profile:", err);
+        });
 
-        // Fetch Public Shared Files Collection following rule 1 & rule 2
-        const filesColRef = collection(db, 'artifacts', DB_APP_ID, 'public', 'data', 'files');
+        // Fetch Public Shared Files Collection using strict path
+        const filesColRef = collection(db, 'artifacts', appId, 'public', 'data', 'files');
         onSnapshot(filesColRef, (snap) => {
           window.dbFiles = [];
           snap.forEach(d => window.dbFiles.push({ id: d.id, ...d.data() }));
-          // JavaScript Memory Sorting (Adheres to Rule 2 - No complex order queries)
+          // In-memory sort to prevent index errors
           window.dbFiles.sort((a,b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
           renderFiles();
         }, (err) => {
-          console.error("Unable to load public catalog:", err);
-          window.showNotification("Database communication fault.", "error");
+          console.error("Error loading vault:", err);
+          window.showNotification("Failed to load files.", "error");
         });
       });
     }
@@ -463,20 +469,21 @@
       
       document.getElementById('store-count').textContent = `${window.dbFiles.length} files`;
 
-      // AAA No Files Available Fallback
+      // Flawless AAA "No Files Available" State
       if (window.dbFiles.length === 0) {
         const noFilesPlaceholder = `
-          <div class="text-center py-16 glass-panel rounded-3xl animate-fade-in">
-            <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/10">
-              <i class="fa-solid fa-box-open text-gray-500 text-2xl animate-pulse"></i>
+          <div class="text-center py-16 glass-panel rounded-3xl animate-fade-in border border-white/5">
+            <div class="w-20 h-20 bg-gradient-to-tr from-gray-800 to-gray-900 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner border border-white/5 relative">
+              <div class="absolute inset-0 rounded-full border border-gray-600 animate-ping opacity-20"></div>
+              <i class="fa-solid fa-folder-open text-gray-500 text-3xl"></i>
             </div>
-            <h4 class="text-white font-bold text-base mb-1">No files available currently</h4>
-            <p class="text-xs text-gray-500 max-w-xs mx-auto px-4">There are no files shared in the vault at this moment. Please check back later.</p>
+            <h4 class="text-white font-extrabold text-lg mb-2 tracking-wide">Vault is Empty</h4>
+            <p class="text-xs text-gray-500 max-w-xs mx-auto px-4 font-medium leading-relaxed">There are currently no premium packages available. Please check back later for new exclusive uploads.</p>
           </div>
         `;
         storeDiv.innerHTML = noFilesPlaceholder;
-        adminDiv.innerHTML = `<div class="bg-black/30 p-4 rounded-2xl border border-white/5 text-center"><p class="text-xs text-gray-500">No uploads present.</p></div>`;
-        unlockedDiv.innerHTML = `<div class="text-center py-6 bg-black/20 rounded-2xl border border-white/5"><p class="text-xs text-gray-500">You haven't unlocked any files yet.</p></div>`;
+        adminDiv.innerHTML = `<div class="bg-black/30 p-5 rounded-2xl border border-white/5 text-center"><i class="fa-solid fa-ghost text-gray-600 text-xl mb-2"></i><p class="text-xs text-gray-500">No uploads present.</p></div>`;
+        unlockedDiv.innerHTML = `<div class="text-center py-8 bg-black/20 rounded-2xl border border-white/5"><i class="fa-solid fa-lock text-gray-600 text-xl mb-2"></i><p class="text-xs text-gray-500">You haven't unlocked any files yet.</p></div>`;
         return;
       }
 
@@ -526,7 +533,8 @@
             </div>`;
         }
 
-        if (window.userUid === ADMIN_ID) {
+        // Only show to Admin
+        if (window.tgId === ADMIN_TELEGRAM_ID || auth.currentUser?.uid === ADMIN_TELEGRAM_ID) {
           adminHtml += `
             <div class="bg-black/50 p-4 rounded-2xl border border-white/5 flex justify-between items-center">
               <div class="min-w-0 pr-4">
@@ -540,12 +548,12 @@
 
       storeDiv.innerHTML = storeHtml;
       
-      if (window.userUid === ADMIN_ID) {
+      if (window.tgId === ADMIN_TELEGRAM_ID || auth.currentUser?.uid === ADMIN_TELEGRAM_ID) {
          adminDiv.innerHTML = adminHtml;
       }
 
       if (!unlockedCheck) {
-         unlockedDiv.innerHTML = `<div class="text-center py-6 bg-black/20 rounded-2xl border border-white/5"><p class="text-xs text-gray-500">You haven't unlocked any files yet.</p></div>`;
+         unlockedDiv.innerHTML = `<div class="text-center py-8 bg-black/20 rounded-2xl border border-white/5"><i class="fa-solid fa-lock text-gray-600 text-xl mb-2"></i><p class="text-xs text-gray-500">You haven't unlocked any files yet.</p></div>`;
       } else {
          unlockedDiv.innerHTML = unlockedHtml;
       }
@@ -553,20 +561,24 @@
 
     // Purchase Processing Logic
     window.buyFile = async (fileId, price) => {
-      if (window.currentUserData.balance < price) { window.showNotification("Insufficient balance! Watch ads to earn more credits.", "error"); return; }
+      const user = auth.currentUser;
+      if (!user) return;
+      if (window.currentUserData.balance < price) { window.showNotification("Insufficient balance! Watch ads to earn.", "error"); return; }
+      
       try {
-        const ref = doc(db, 'artifacts', DB_APP_ID, 'users', window.userUid, 'profile', 'data');
+        const ref = doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'main');
         await updateDoc(ref, {
           balance: Number((window.currentUserData.balance - price).toFixed(6)),
           unlockedFiles: [...(window.currentUserData.unlockedFiles || []), fileId]
         });
-        window.showNotification("🎉 Dropbox link unlocked! Check your Profile tab.", "success");
+        window.showNotification("🎉 Package unlocked successfully!", "success");
       } catch (err) {
-        window.showNotification("Transaction failed. Try again.", "error");
+        console.error("Purchase error:", err);
+        window.showNotification("Transaction failed. System error.", "error");
       }
     };
 
-    // Correct Admin Package Upload (Adheres to Strict Rule 1 paths)
+    // FIXED: Publish File using strict paths
     window.publishFile = async () => {
       const btn = document.getElementById('publishBtn');
       const name = document.getElementById('admin-file-name').value.trim();
@@ -583,8 +595,7 @@
         btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Publishing...`;
         btn.disabled = true;
 
-        // Path structure matches `/artifacts/{appId}/public/data/{collectionName}`
-        const collectionRef = collection(db, 'artifacts', DB_APP_ID, 'public', 'data', 'files');
+        const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'files');
         await addDoc(collectionRef, {
           name, 
           url, 
@@ -593,7 +604,7 @@
           createdAt: new Date().toISOString()
         });
         
-        window.showNotification("✅ File successfully published to database!", "success");
+        window.showNotification("✅ File published to vault successfully!", "success");
         
         document.getElementById('admin-file-name').value = ''; 
         document.getElementById('admin-file-url').value = '';
@@ -601,14 +612,13 @@
         document.getElementById('admin-file-discount').value = '';
       } catch(err) {
         console.error("Database Save Error:", err);
-        window.showNotification(`Upload Error! Reason: ${err.message}`, "error");
+        window.showNotification(`Upload Denied! Permission Error.`, "error");
       } finally {
         btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Publish File Package`;
         btn.disabled = false;
       }
     };
 
-    // Open Confirmation Dialog
     window.openConfirmModal = (fileId, fileName) => {
       window.itemToDelete = fileId;
       document.getElementById('confirm-modal-text').innerHTML = `Are you sure you want to delete <b>${fileName}</b>?`;
@@ -623,7 +633,6 @@
       });
     };
 
-    // Close Confirmation Dialog
     window.closeConfirmModal = () => {
       window.itemToDelete = null;
       const modal = document.getElementById('confirm-modal');
@@ -637,31 +646,31 @@
       }, 300);
     };
 
-    // Delete Process Execution
     window.executeDelete = async () => {
       if(!window.itemToDelete) return;
       const id = window.itemToDelete;
       window.closeConfirmModal();
 
       try {
-        await deleteDoc(doc(db, 'artifacts', DB_APP_ID, 'public', 'data', 'files', id));
-        window.showNotification("🗑️ File successfully deleted.", "success");
+        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'files', id));
+        window.showNotification("🗑️ File permanently deleted.", "success");
       } catch(err) {
-        console.error("Delete Action Failed:", err);
-        window.showNotification("Deletion failed. Try again.", "error");
+        console.error("Delete Failed:", err);
+        window.showNotification("Deletion failed.", "error");
       }
     };
 
-    // Sponsor Ad View Timer Logic
     let adWatchInProgress = false;
 
     document.getElementById('ad-button').addEventListener('click', () => {
+      const user = auth.currentUser;
+      if (!user) { window.showNotification("Authenticating, please wait...", "error"); return; }
       if (adWatchInProgress) return;
 
       const today = new Date().toDateString();
       let watched = window.currentUserData.dailyAdsWatched || 0;
       if (window.currentUserData.lastAdWatchedDate !== today) watched = 0;
-      if (watched >= 100) { window.showNotification("Daily ad viewing limit reached!", "error"); return; }
+      if (watched >= 100) { window.showNotification("Daily view limit (100) reached!", "error"); return; }
 
       adWatchInProgress = true;
       const loadingScreen = document.getElementById('ad-loading-screen');
@@ -682,7 +691,7 @@
           loadingScreen.classList.add('hidden');
           adWatchInProgress = false;
 
-          const ref = doc(db, 'artifacts', DB_APP_ID, 'users', window.userUid, 'profile', 'data');
+          const ref = doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'main');
           updateDoc(ref, {
             balance: Number((window.currentUserData.balance + 0.002).toFixed(6)),
             dailyAdsWatched: watched + 1,
@@ -690,6 +699,7 @@
           }).then(() => {
             window.showNotification("Success! Reward +$0.0020 added.", "success");
           }).catch((err) => {
+             console.error("Reward error:", err);
             window.showNotification("Failed to assign reward.", "error");
           });
         }
@@ -733,5 +743,6 @@
   </script>
 </body>
 </html>
+
 
 ```

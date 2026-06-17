@@ -4,29 +4,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>NINOKI FILES BOT</title>
+  <title>NINOKI PREMIUM FILES</title>
   
-  <!-- 1. TELEGRAM WEB APP SDK (Oto-Login ve Telegram ID Alımı İçin) -->
+  <!-- TELEGRAM WEB APP SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
   
-  <!-- 2. RICHADS SDK -->
+  <!-- RICHADS SDK -->
   <script src="https://richinfo.co/richpartners/telegram/js/tg-ob.js"></script>
   
-  <!-- Tailwind CSS & FontAwesome İkon Kütüphanesi -->
+  <!-- Tailwind CSS & FontAwesome -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <script>
-    // Tailwind Özelleştirmeleri
     tailwind.config = {
       theme: { 
         extend: { 
-          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
           colors: {
-            premiumDark: '#070b19',
-            premiumCard: '#0f172a',
-            premiumBorder: '#1e293b',
+            bgDark: '#050505',
+            panelDark: '#121214',
+            panelLighter: '#1a1a1f',
+            accent: '#3b82f6',
+            accentGlow: '#60a5fa'
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.3s ease-out',
+            'slide-up': 'slideUp 0.4s ease-out'
+          },
+          keyframes: {
+            fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+            slideUp: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
           }
         } 
       }
@@ -34,21 +43,30 @@
   </script>
 
   <style>
-    /* Tarayıcı kaydırma çubuğunu gizleme */
     ::-webkit-scrollbar { display: none; }
     body { 
       -webkit-touch-callout: none; 
       -webkit-user-select: none; 
       user-select: none; 
-      background-color: #070b19; 
-      font-family: 'Inter', sans-serif; 
+      background-color: #050505; 
+      background-image: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+      background-attachment: fixed;
     }
-    .gradient-bg {
-      background: radial-gradient(circle at top, rgba(99, 102, 241, 0.15) 0%, rgba(7, 11, 25, 0) 70%);
+    .glass-panel {
+      background: rgba(18, 18, 20, 0.6);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .glass-nav {
+      background: rgba(10, 10, 12, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
     .ad-loader { 
-      border: 4px solid rgba(16, 185, 129, 0.2); 
-      border-top: 4px solid #10b981; 
+      border: 3px solid rgba(16, 185, 129, 0.2); 
+      border-top: 3px solid #10b981; 
       border-radius: 50%; 
       width: 40px; 
       height: 40px; 
@@ -57,219 +75,229 @@
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
-<body class="text-white min-h-screen flex flex-col justify-between overflow-x-hidden pb-24 gradient-bg">
+<body class="text-white min-h-screen flex flex-col justify-between overflow-x-hidden pb-28">
 
-  <!-- ÜST HEADER (Kullanıcı Bakiyesi ve Logo) -->
-  <header class="sticky top-0 z-40 bg-[#070b19]/90 backdrop-blur-md border-b border-slate-800/80 px-4 py-4 flex items-center justify-between">
-    <div class="flex items-center space-x-2.5">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-        <i class="fa-solid fa-cloud-arrow-down text-white text-base"></i>
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 glass-panel px-5 py-4 flex items-center justify-between shadow-lg shadow-black/20">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.4)]">
+        <i class="fa-solid fa-cloud-bolt text-white text-lg"></i>
       </div>
       <div>
-        <h1 class="text-sm font-black tracking-wider bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">NINOKI</h1>
-        <p class="text-[9px] text-cyan-400 font-extrabold tracking-widest uppercase">Files Bot</p>
+        <h1 class="text-base font-extrabold tracking-wide text-white">NINOKI <span class="text-blue-400">PRO</span></h1>
+        <p class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">Premium Vault</p>
       </div>
     </div>
 
-    <!-- Canlı Bakiye Göstergesi -->
-    <div class="bg-slate-900/95 border border-emerald-500/30 rounded-full px-3.5 py-1.5 flex items-center space-x-2 shadow-inner">
-      <i class="fa-solid fa-circle-dollar-to-slot text-emerald-400 animate-pulse"></i>
-      <span id="header-balance" class="text-xs font-black text-emerald-400">$0.0000</span>
+    <!-- BALANCE -->
+    <div class="bg-black/50 border border-green-500/20 rounded-full px-4 py-2 flex items-center space-x-2 shadow-inner">
+      <i class="fa-solid fa-wallet text-green-400"></i>
+      <span id="header-balance" class="text-sm font-bold text-green-400">$0.0000</span>
     </div>
   </header>
 
-  <!-- ANA PANEL İÇERİĞİ -->
-  <main class="flex-1 p-4 max-w-lg mx-auto w-full space-y-6">
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 p-5 max-w-lg mx-auto w-full">
 
-    <!-- TAB 1: MAĞAZA (STORE) -->
-    <div id="tab-store" class="space-y-4">
-      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-950/80 via-slate-900/90 to-cyan-950/80 border border-slate-800 p-6 shadow-xl">
-        <div class="space-y-1.5 relative z-10">
-          <span class="bg-cyan-500/20 text-cyan-300 text-[10px] uppercase font-black tracking-widest px-2.5 py-1 rounded-full border border-cyan-500/30">
-            <i class="fa-solid fa-share-nodes mr-1"></i> Dropbox Link Share
+    <!-- STORE TAB -->
+    <div id="tab-store" class="space-y-6 animate-fade-in">
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-900/40 to-blue-900/20 border border-blue-500/20 p-6 shadow-2xl">
+        <div class="absolute -right-10 -top-10 w-32 h-32 bg-blue-500/20 blur-3xl rounded-full"></div>
+        <div class="space-y-2 relative z-10">
+          <span class="bg-blue-500/10 text-blue-400 text-[10px] uppercase font-bold tracking-widest px-3 py-1.5 rounded-full border border-blue-500/20">
+            <i class="fa-solid fa-bolt text-yellow-400 mr-1"></i> VIP Access
           </span>
-          <h2 class="text-xl font-black tracking-tight text-white mt-1">Unlock Shared Archives</h2>
-          <p class="text-xs text-slate-400 leading-relaxed">Watch sponsored video ads to earn free credits, and unlock premium cloud storage files.</p>
+          <h2 class="text-2xl font-extrabold text-white mt-2 leading-tight">Unlock Premium<br>Cloud Files</h2>
+          <p class="text-xs text-gray-400 leading-relaxed font-medium">Watch sponsored videos to earn credits and gain lifetime access to exclusive archives.</p>
         </div>
       </div>
 
-      <div class="flex items-center justify-between pt-2">
-        <h3 class="text-xs font-bold tracking-wider text-slate-400 uppercase">Available Files</h3>
-        <span id="store-count" class="text-xs text-cyan-400 font-bold bg-cyan-950/50 px-2.5 py-1 rounded-lg border border-cyan-500/20">0 files</span>
+      <div class="flex items-center justify-between px-1">
+        <h3 class="text-sm font-bold text-gray-300">Available Packages</h3>
+        <span id="store-count" class="text-xs text-blue-400 font-semibold bg-blue-500/10 px-3 py-1 rounded-full">0 files</span>
       </div>
 
-      <!-- Yüklenen Bulut Dosyaları Listesi -->
       <div id="files-list" class="grid grid-cols-1 gap-4">
-        <div class="text-center py-12 bg-slate-900/40 rounded-2xl border border-slate-800/50">
-          <p class="text-sm text-slate-500">Retrieving system vault files...</p>
+        <!-- Skeleton Loader -->
+        <div class="text-center py-12 glass-panel rounded-3xl">
+          <i class="fa-solid fa-circle-notch fa-spin text-blue-500 text-2xl mb-3"></i>
+          <p class="text-sm text-gray-400">Sistem dosyaları yükleniyor...</p>
         </div>
       </div>
     </div>
 
-    <!-- TAB 2: KAZANÇ (EARN) -->
-    <div id="tab-earn" class="space-y-6 hidden">
-      <div class="text-center space-y-3 bg-slate-900/40 p-6 rounded-3xl border border-slate-800/80">
-        <div class="w-16 h-16 bg-gradient-to-tr from-emerald-500/20 to-teal-500/50 rounded-2xl flex items-center justify-center mx-auto border border-emerald-500/30 shadow-lg">
-          <i class="fa-solid fa-circle-play text-emerald-400 text-2xl animate-pulse"></i>
+    <!-- EARN TAB -->
+    <div id="tab-earn" class="space-y-6 hidden animate-fade-in">
+      <div class="text-center space-y-4 glass-panel p-8 rounded-3xl">
+        <div class="w-20 h-20 bg-gradient-to-br from-green-500/20 to-emerald-500/10 rounded-full flex items-center justify-center mx-auto border border-green-500/30 shadow-[0_0_30px_rgba(16,185,129,0.15)] relative">
+          <div class="absolute inset-0 rounded-full border-2 border-green-400/50 animate-ping opacity-20"></div>
+          <i class="fa-solid fa-play text-green-400 text-3xl ml-1"></i>
         </div>
-        <div class="space-y-1">
-          <h3 class="text-lg font-extrabold">Instant Cloud Credits</h3>
-          <p class="text-xs text-slate-400">Complete standard RichAds tasks to immediately credit your balance.</p>
+        <div class="space-y-2">
+          <h3 class="text-xl font-bold text-white">Earn Cloud Credits</h3>
+          <p class="text-xs text-gray-400 font-medium">Watch short sponsor advertisements to instantly credit your balance.</p>
         </div>
         
-        <!-- Günlük Limit Barı ve İlerleme -->
-        <div class="pt-4">
-          <div class="bg-slate-950/80 rounded-2xl p-4 border border-slate-800 space-y-2">
-            <div class="flex justify-between text-xs">
-              <span class="text-slate-400">Daily Video Quota</span>
+        <div class="pt-4 w-full">
+          <div class="bg-black/40 rounded-2xl p-4 border border-white/5">
+            <div class="flex justify-between text-xs mb-2">
+              <span class="text-gray-400 font-medium">Daily Limit</span>
               <span id="daily-ads-text" class="font-bold text-white">0 / 100</span>
             </div>
-            <div class="w-full bg-slate-855 h-2.5 rounded-full overflow-hidden">
-              <div id="daily-ads-bar" class="bg-gradient-to-r from-emerald-500 to-cyan-500 h-full w-0 transition-all duration-300"></div>
+            <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden">
+              <div id="daily-ads-bar" class="bg-gradient-to-r from-green-400 to-emerald-500 h-full w-0 transition-all duration-500 ease-out"></div>
             </div>
-            <p class="text-[10px] text-left text-slate-400 mt-1"><i class="fa-solid fa-clock mr-1"></i>Automated midnight timezone reset</p>
           </div>
         </div>
       </div>
 
-      <!-- REKLAM İZLEME TASKI (YENİLENEN BAKİYE ORANI $0.002) -->
-      <div class="bg-slate-900/80 border border-indigo-500/20 rounded-2xl p-5 flex items-center justify-between space-x-4">
-        <div class="space-y-1.5">
-          <div class="flex items-center space-x-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-            <h5 class="font-bold text-sm text-white">RichAds Interstitial Video</h5>
-          </div>
-          <p class="text-xs text-slate-400">Watch the sponsor campaign</p>
-          <p class="text-[11px] text-emerald-400 font-black flex items-center gap-1">
-            <i class="fa-solid fa-coins"></i> Reward: +$0.0020
-          </p>
+      <div class="glass-panel border-green-500/20 rounded-3xl p-5 flex items-center justify-between group hover:border-green-500/40 transition-all">
+        <div class="space-y-1">
+          <h5 class="font-bold text-sm text-white flex items-center gap-2">
+            RichAds Sponsor <span class="flex h-2 w-2 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span>
+          </h5>
+          <p class="text-[11px] text-green-400 font-bold"><i class="fa-solid fa-coins mr-1"></i>Reward: +$0.0020</p>
         </div>
         
-        <!-- RichAds Tetikleyici Buton -->
-        <button id="ad-button" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-xs py-3 px-5 rounded-xl flex items-center space-x-1.5 transition active:scale-95 shrink-0">
-          <i class="fa-regular fa-circle-play text-sm"></i>
+        <button id="ad-button" class="bg-white text-black font-bold text-xs py-3 px-6 rounded-2xl flex items-center space-x-2 transition-transform active:scale-95 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+          <i class="fa-solid fa-video"></i>
           <span>Watch</span>
         </button>
       </div>
     </div>
 
-    <!-- TAB 3: PROFİL (PROFILE) -->
-    <div id="tab-profile" class="space-y-6 hidden">
-      <div class="bg-[#0f172a]/80 rounded-3xl p-6 border border-slate-800 flex flex-col items-center text-center space-y-4">
-        <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center border border-slate-700">
-          <i class="fa-regular fa-user text-2xl text-slate-300"></i>
+    <!-- PROFILE TAB -->
+    <div id="tab-profile" class="space-y-6 hidden animate-fade-in">
+      <div class="glass-panel rounded-3xl p-8 flex flex-col items-center text-center relative overflow-hidden">
+        <div class="absolute top-0 w-full h-32 bg-gradient-to-b from-blue-600/10 to-transparent"></div>
+        <div class="w-20 h-20 bg-panelLighter rounded-full flex items-center justify-center border-4 border-bgDark shadow-xl relative z-10 mb-4">
+          <i class="fa-solid fa-user-astronaut text-3xl text-gray-300"></i>
         </div>
-        <div class="space-y-1">
-          <h3 id="profile-name" class="font-extrabold text-base text-white">Telegram User</h3>
-          <p id="profile-id" class="text-xs text-slate-400 font-mono">ID: Unknown</p>
+        <div class="space-y-1 relative z-10">
+          <h3 id="profile-name" class="font-bold text-lg text-white">Loading...</h3>
+          <p id="profile-id" class="text-xs text-blue-400 font-mono bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20 inline-block mt-2">ID: ---</p>
         </div>
-        <div class="w-full grid grid-cols-2 gap-3 pt-2">
-          <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
-            <span class="text-[10px] text-slate-500 uppercase font-black">My Balance</span>
-            <p id="profile-balance" class="text-sm font-black text-emerald-400">$0.0000</p>
+        
+        <div class="w-full grid grid-cols-2 gap-4 pt-6 relative z-10">
+          <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
+            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Total Balance</span>
+            <p id="profile-balance" class="text-lg font-bold text-green-400 mt-1">$0.0000</p>
           </div>
-          <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
-            <span class="text-[10px] text-slate-500 uppercase font-black">Unlocked Files</span>
-            <p id="profile-unlocked-count" class="text-sm font-black text-indigo-400">0 items</p>
+          <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
+            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Unlocked</span>
+            <p id="profile-unlocked-count" class="text-lg font-bold text-blue-400 mt-1">0</p>
           </div>
         </div>
       </div>
 
-      <div class="bg-slate-900/40 rounded-3xl p-6 border border-slate-800 space-y-4">
-        <h4 class="text-xs font-black uppercase text-slate-400 tracking-widest"><i class="fa-solid fa-cloud mr-1"></i> Unlocked Cloud Library</h4>
-        <div id="unlocked-files-list" class="space-y-2">
-          <p class="text-xs text-slate-500">You haven't unlocked any files yet.</p>
+      <div class="glass-panel rounded-3xl p-6">
+        <h4 class="text-xs font-bold uppercase text-gray-400 tracking-widest mb-4"><i class="fa-solid fa-vault mr-2"></i>My Vault</h4>
+        <div id="unlocked-files-list" class="space-y-3">
+          <div class="text-center py-6 bg-black/20 rounded-2xl border border-white/5"><p class="text-xs text-gray-500">You haven't unlocked any files yet.</p></div>
         </div>
       </div>
     </div>
 
-    <!-- TAB 4: ADMİN PANELİ (ADMIN) -->
-    <div id="tab-admin" class="space-y-6 hidden">
-      <div class="bg-slate-900/80 rounded-3xl p-6 border border-red-500/20 space-y-2">
-        <div class="flex items-center space-x-2">
-          <i class="fa-solid fa-lock text-red-400"></i>
-          <h3 class="text-sm font-extrabold tracking-wider text-red-400 uppercase">Administrator Panel</h3>
+    <!-- ADMIN TAB -->
+    <div id="tab-admin" class="space-y-6 hidden animate-fade-in">
+      <div class="bg-red-500/10 rounded-3xl p-6 border border-red-500/20">
+        <div class="flex items-center space-x-3 mb-2">
+          <div class="p-2 bg-red-500/20 rounded-lg"><i class="fa-solid fa-shield-halved text-red-400"></i></div>
+          <h3 class="text-sm font-bold text-red-400 uppercase tracking-widest">Admin Control</h3>
         </div>
-        <p class="text-xs text-slate-400">Directly post Dropbox, OneDrive, or Mega URLs as premium packages.</p>
+        <p class="text-xs text-gray-400">Dosya ekleme ve silme işlemlerini buradan yönetebilirsin.</p>
       </div>
 
-      <!-- DOSYA EKLEME FORMU -->
-      <div class="bg-slate-900/60 rounded-3xl p-6 border border-slate-800 space-y-4">
-        <h4 class="text-xs font-bold uppercase text-slate-300 tracking-wider"><i class="fa-solid fa-plus-circle mr-1"></i> Add Cloud / Dropbox File</h4>
-        <div class="space-y-3 text-xs">
+      <!-- Add File -->
+      <div class="glass-panel rounded-3xl p-6">
+        <h4 class="text-sm font-bold text-white mb-5 flex items-center gap-2"><i class="fa-solid fa-plus text-blue-400"></i> Yeni Dosya Ekle</h4>
+        <div class="space-y-4">
           <div>
-            <label class="text-slate-400 block mb-1">File Title</label>
-            <input type="text" id="admin-file-name" placeholder="Premium Dropbox Archive v1.0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-indigo-500">
+            <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">Dosya Başlığı</label>
+            <input type="text" id="admin-file-name" placeholder="Örn: Premium Archive v2" class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
           </div>
-
           <div>
-            <label class="text-slate-400 block mb-1">Cloud / Dropbox / Google Drive Link</label>
-            <input type="url" id="admin-file-url" placeholder="https://www.dropbox.com/s/abcdefgh/file.zip?dl=1" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-indigo-500">
+            <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">İndirme Linki (URL)</label>
+            <input type="url" id="admin-file-url" placeholder="https://dropbox.com/..." class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
           </div>
-
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="text-slate-400 block mb-1">Standard Price ($)</label>
-              <input type="number" step="0.001" id="admin-file-price" placeholder="0.10" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-indigo-500">
+              <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">Fiyat ($)</label>
+              <input type="number" step="0.001" id="admin-file-price" placeholder="0.10" class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
             </div>
             <div>
-              <label class="text-slate-400 block mb-1">Discount Price (Opt)</label>
-              <input type="number" step="0.001" id="admin-file-discount" placeholder="0.05" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-indigo-500">
+              <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">İndirimli (Ops.)</label>
+              <input type="number" step="0.001" id="admin-file-discount" placeholder="Boş bırakılabilir" class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
             </div>
           </div>
         </div>
-        <button onclick="publishFile()" class="w-full bg-gradient-to-r from-red-500 to-amber-600 text-white font-black text-xs py-3 rounded-xl transition active:scale-95">Publish File Package</button>
+        <button onclick="publishFile()" id="publishBtn" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm py-4 rounded-2xl transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] active:scale-95 flex justify-center items-center gap-2">
+          <i class="fa-solid fa-cloud-arrow-up"></i> Dosyayı Yayınla
+        </button>
       </div>
 
-      <!-- MEVCUT DOSYALARI SİLME VE YÖNETME -->
-      <div class="bg-slate-900/40 rounded-3xl p-6 border border-slate-800 space-y-4">
-        <h4 class="text-xs font-black uppercase text-slate-400 tracking-widest">Active Packages</h4>
-        <div id="admin-files-list" class="space-y-2"></div>
+      <!-- Manage Files -->
+      <div class="glass-panel rounded-3xl p-6">
+        <h4 class="text-xs font-bold uppercase text-gray-400 tracking-widest mb-4">Aktif Dosyalar</h4>
+        <div id="admin-files-list" class="space-y-3"></div>
       </div>
     </div>
 
   </main>
 
-  <!-- ÖZEL BİLDİRİM PANELİ -->
-  <div id="alert-box" class="hidden fixed bottom-24 left-4 right-4 z-50 bg-slate-900/95 border border-cyan-500/40 text-white text-xs px-4 py-3.5 rounded-2xl shadow-2xl flex items-center space-x-2">
-    <div class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></div>
-    <span id="alert-text" class="font-semibold"></span>
-  </div>
-  
-  <!-- REKLAM YÜKLENİYOR / BEKLEME EKRANI (GARANTİLİ ÖDÜL İÇİN) -->
-  <div id="ad-loading-screen" class="hidden fixed inset-0 z-[99999] bg-black/95 flex flex-col items-center justify-center p-4 text-center">
-    <div class="ad-loader mb-4"></div>
-    <h2 class="text-white font-bold text-lg mb-2">Displaying Advertisement...</h2>
-    <p class="text-emerald-400 text-xs">Please wait. Do not close this window.</p>
-    <!-- Geri Sayım Göstergesi -->
-    <div class="mt-6 bg-slate-900 px-4 py-2 rounded-full border border-slate-700">
-      <span class="text-white font-mono font-bold" id="ad-timer">12</span><span class="text-slate-400 text-xs ml-1">seconds left</span>
-    </div>
-  </div>
-
-  <!-- ALT NAVİGASYON MENÜSÜ -->
-  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-[#070b19]/95 backdrop-blur-md border-t border-slate-800/80 px-6 py-4 flex items-center justify-around">
-    <button onclick="switchTab('store')" id="nav-store" class="flex flex-col items-center space-y-1 text-cyan-400">
-      <i class="fa-solid fa-folder-closed"></i><span class="text-[10px] font-black uppercase">Store</span>
+  <!-- FLOATING BOTTOM NAVIGATION (IOS STYLE) -->
+  <nav class="fixed bottom-6 left-6 right-6 z-40 glass-nav rounded-3xl px-2 py-2 flex items-center justify-between shadow-2xl">
+    <button onclick="switchTab('store')" id="nav-store" class="nav-btn flex-1 flex flex-col items-center py-2 text-blue-400 transition-colors rounded-2xl bg-white/5">
+      <i class="fa-solid fa-shop text-lg mb-1"></i><span class="text-[9px] font-bold uppercase tracking-wider">Store</span>
     </button>
-    <button onclick="switchTab('earn')" id="nav-earn" class="flex flex-col items-center space-y-1 text-slate-500 hover:text-slate-400">
-      <i class="fa-solid fa-coins"></i><span class="text-[10px] font-black uppercase">Earn</span>
+    <button onclick="switchTab('earn')" id="nav-earn" class="nav-btn flex-1 flex flex-col items-center py-2 text-gray-500 hover:text-white transition-colors rounded-2xl">
+      <i class="fa-solid fa-circle-play text-lg mb-1"></i><span class="text-[9px] font-bold uppercase tracking-wider">Earn</span>
     </button>
-    <button onclick="switchTab('profile')" id="nav-profile" class="flex flex-col items-center space-y-1 text-slate-500 hover:text-slate-400">
-      <i class="fa-solid fa-id-card-clip"></i><span class="text-[10px] font-black uppercase">Profile</span>
+    <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn flex-1 flex flex-col items-center py-2 text-gray-500 hover:text-white transition-colors rounded-2xl">
+      <i class="fa-solid fa-user text-lg mb-1"></i><span class="text-[9px] font-bold uppercase tracking-wider">Profile</span>
     </button>
-    <button onclick="switchTab('admin')" id="nav-admin" class="hidden flex flex-col items-center space-y-1 text-slate-500 hover:text-slate-400">
-      <i class="fa-solid fa-unlock-keyhole text-red-500"></i><span class="text-[10px] font-black uppercase">Admin</span>
+    <button onclick="switchTab('admin')" id="nav-admin" class="nav-btn hidden flex-1 flex flex-col items-center py-2 text-red-500 hover:bg-red-500/10 transition-colors rounded-2xl">
+      <i class="fa-solid fa-shield-halved text-lg mb-1"></i><span class="text-[9px] font-bold uppercase tracking-wider">Admin</span>
     </button>
   </nav>
 
-  <!-- FIREBASE VE CORE SİSTEM BAĞLANTISI -->
+  <!-- YENİ BİLDİRİM TOAST EKRANI (PREMIUM) -->
+  <div id="toast-container" class="fixed top-20 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 w-full max-w-sm px-4 pointer-events-none"></div>
+
+  <!-- ONAY MODALI (EMİN MİSİN POPUP'I) -->
+  <div id="confirm-modal" class="hidden fixed inset-0 z-[1000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-5 opacity-0 transition-opacity duration-300">
+    <div id="confirm-box" class="bg-panelLighter border border-white/10 rounded-3xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300">
+      <div class="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-4">
+        <i class="fa-solid fa-triangle-exclamation text-3xl text-red-500"></i>
+      </div>
+      <h3 class="text-xl font-bold text-center text-white mb-2">Emin misin?</h3>
+      <p id="confirm-modal-text" class="text-sm text-gray-400 text-center mb-8">Bu dosyayı silmek üzeresin. Bu işlem geri alınamaz.</p>
+      <div class="flex gap-3">
+        <button onclick="closeConfirmModal()" class="flex-1 bg-black/50 border border-white/10 text-white font-bold py-3.5 rounded-2xl hover:bg-white/5 transition active:scale-95">İptal</button>
+        <button onclick="executeDelete()" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-2xl shadow-[0_0_15px_rgba(220,38,38,0.3)] transition active:scale-95">Evet, Sil</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- REKLAM BEKLEME EKRANI -->
+  <div id="ad-loading-screen" class="hidden fixed inset-0 z-[99999] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-5 text-center">
+    <div class="ad-loader mb-6"></div>
+    <h2 class="text-white font-bold text-xl mb-2">Sponsor Reklamı Yükleniyor</h2>
+    <p class="text-green-400 text-sm font-medium">Lütfen bekleyin, bu pencereyi kapatmayın.</p>
+    <div class="mt-8 bg-black/50 px-6 py-3 rounded-2xl border border-white/10 flex items-center gap-3">
+      <i class="fa-regular fa-clock text-gray-400"></i>
+      <span class="text-white font-mono font-bold text-lg" id="ad-timer">12</span>
+      <span class="text-gray-400 text-xs font-medium">saniye kaldı</span>
+    </div>
+  </div>
+
+  <!-- SCRIPT BÖLÜMÜ -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
     import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, addDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
-    // 1. RICHADS KONTROLCÜ BAŞLATMA
+    // RICHADS KONTROLCÜ BAŞLATMA
     window.richadsController = new window.TelegramAdsController();
     window.richadsController.initialize({
         pubId: "988708",
@@ -277,7 +305,6 @@
         debug: false
     });
 
-    // Firebase Yapılandırması
     const firebaseConfig = {
       apiKey: "AIzaSyChSJa8aBjUwDcM7IFr_iuNMe7PwqhfK3k",
       authDomain: "ninokifiles.firebaseapp.com",
@@ -291,287 +318,349 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
     const DB_APP_ID = "ninokifiles";
-    const ADMIN_ID = "7904032877"; // Yönetici ID'si
+    const ADMIN_ID = "7904032877";
 
     window.currentUserData = { balance: 0.0, dailyAdsWatched: 0, lastAdWatchedDate: "", unlockedFiles: [] };
     window.dbFiles = [];
     window.userUid = null; 
+    window.itemToDelete = null; // Silinecek dosyanın ID'sini tutar
 
-    // TELEGRAM VE FIREBASE ENTEGRASYON SÜRECİ
+    // Premium Toast Bildirim Sistemi
+    window.showNotification = function(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      
+      let icon = '<i class="fa-solid fa-circle-info text-blue-400"></i>';
+      let border = 'border-blue-500/30';
+      if(type === 'success') { icon = '<i class="fa-solid fa-circle-check text-green-400"></i>'; border = 'border-green-500/30'; }
+      if(type === 'error') { icon = '<i class="fa-solid fa-circle-xmark text-red-400"></i>'; border = 'border-red-500/30'; }
+      
+      toast.className = `bg-panelLighter/90 backdrop-blur-md border ${border} text-white text-sm px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-[-20px] opacity-0 transition-all duration-300`;
+      toast.innerHTML = `${icon} <span class="font-medium">${msg}</span>`;
+      
+      container.appendChild(toast);
+      
+      // Animasyon tetikle
+      requestAnimationFrame(() => {
+        toast.style.transform = 'translateY(0)';
+        toast.style.opacity = '1';
+      });
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-20px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    };
+
     async function startApp() {
       let tgUserId = null;
-      let tgName = "Telegram User";
+      let tgName = "Ghost User";
 
-      // Telegram WebApp ID'sini saniyeler içinde çekip otomatik giriş yapıyoruz
       try {
         if (window.Telegram && window.Telegram.WebApp) {
           const tg = window.Telegram.WebApp;
           tg.ready();
           tg.expand();
+          tg.setHeaderColor('#050505');
+          tg.setBackgroundColor('#050505');
           if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             tgUserId = String(tg.initDataUnsafe.user.id);
             tgName = tg.initDataUnsafe.user.first_name + " " + (tg.initDataUnsafe.user.last_name || "");
           }
         }
       } catch (e) {
-        console.warn("Telegram WebApp algılanamadı, fallback kimliği atanıyor.");
+        console.warn("Telegram bulunamadı");
       }
 
-      // Sessiz Firebase Anonim Kimlik Doğrulama
-      try {
-        await signInAnonymously(auth);
-      } catch (err) {
-        console.error("Firebase auth bypass:", err);
-      }
+      try { await signInAnonymously(auth); } catch (err) {}
 
       onAuthStateChanged(auth, async (user) => {
-        // ID eşleşmesi
         window.userUid = tgUserId ? tgUserId : (user ? user.uid : "fallback_user_123");
         
         document.getElementById('profile-id').textContent = `ID: ${window.userUid}`;
         document.getElementById('profile-name').textContent = tgName;
 
-        // Admin Paneli Kontrolü
         if (window.userUid === ADMIN_ID) {
           document.getElementById('nav-admin').classList.remove('hidden');
         }
 
-        // Kullanıcı Profil Verisini Çek / Günlük Limiti Kontrol Et ve Sıfırla
         const userDocRef = doc(db, 'artifacts', DB_APP_ID, 'users', window.userUid, 'profile', 'data');
         onSnapshot(userDocRef, async (docSnap) => {
           const today = new Date().toDateString();
-          
           if (docSnap.exists()) {
             const data = docSnap.data();
-            
-            // TARİH KONTROLÜ VE OTOMATİK LİMİT SIFIRLAMA (GÜNLÜK SIFIRLAMA)
             if (data.lastAdWatchedDate !== today) {
-              window.currentUserData = {
-                ...data,
-                dailyAdsWatched: 0, // Yeni günde sıfırla
-                lastAdWatchedDate: today
-              };
-              // Güncellenmiş veriyi Firestore'a kaydet
+              window.currentUserData = { ...data, dailyAdsWatched: 0, lastAdWatchedDate: today };
               await setDoc(userDocRef, window.currentUserData, { merge: true });
             } else {
               window.currentUserData = data;
             }
           } else {
-            // İlk kez kayıt olan kullanıcı verisi oluşturma
-            window.currentUserData = { 
-              balance: 0.0, 
-              dailyAdsWatched: 0, 
-              lastAdWatchedDate: today, 
-              unlockedFiles: [] 
-            };
+            window.currentUserData = { balance: 0.0, dailyAdsWatched: 0, lastAdWatchedDate: today, unlockedFiles: [] };
             await setDoc(userDocRef, window.currentUserData, { merge: true });
           }
           syncUI();
-        }, (err) => {
-          console.warn("Veritabanı senkronizasyon hatası:", err);
-        });
+          renderFiles(); // Bakiye/kilit durumuna göre dosyaları tekrar render et
+        }, (err) => console.warn(err));
 
-        // Dosya Paketleri Koleksiyonunu Dinle
         const filesColRef = collection(db, 'artifacts', DB_APP_ID, 'public', 'data', 'files');
         onSnapshot(filesColRef, (snap) => {
           window.dbFiles = [];
           snap.forEach(d => window.dbFiles.push({ id: d.id, ...d.data() }));
+          // ZAMAN/TARİH SIRALAMASI: En son eklenen en üstte
+          window.dbFiles.sort((a,b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
           renderFiles();
-        }, (err) => {
-          console.warn("Dosya listesi çekilemedi:", err);
-        });
+        }, (err) => console.warn(err));
       });
     }
 
-    // ARAYÜZÜ YENİ VERİLERE GÖRE GÜNCELLE
     function syncUI() {
       const data = window.currentUserData;
       document.getElementById('header-balance').textContent = `$${data.balance.toFixed(4)}`;
       document.getElementById('profile-balance').textContent = `$${data.balance.toFixed(4)}`;
-      document.getElementById('profile-unlocked-count').textContent = `${(data.unlockedFiles || []).length} items`;
+      document.getElementById('profile-unlocked-count').textContent = `${(data.unlockedFiles || []).length}`;
       
       const count = data.dailyAdsWatched || 0;
-      document.getElementById('daily-ads-text').textContent = `${count} / 100 Watched`;
+      document.getElementById('daily-ads-text').textContent = `${count} / 100 İzlenen`;
       document.getElementById('daily-ads-bar').style.width = `${(count / 100) * 100}%`;
     }
 
-    // MAĞAZADAKİ BULUT DOSYALARINI LİSTELE
+    // Dosyaları Ekrana Çizen Geliştirilmiş Fonksiyon
     function renderFiles() {
       const storeDiv = document.getElementById('files-list');
       const adminDiv = document.getElementById('admin-files-list');
       const unlockedDiv = document.getElementById('unlocked-files-list');
       
-      document.getElementById('store-count').textContent = `${window.dbFiles.length} files`;
+      document.getElementById('store-count').textContent = `${window.dbFiles.length} packages`;
 
       if (window.dbFiles.length === 0) {
-        storeDiv.innerHTML = `<div class="text-center py-12 bg-slate-900/40 rounded-2xl border border-slate-800/50"><p class="text-sm text-slate-500">No premium dropbox files shared yet.</p></div>`;
-        adminDiv.innerHTML = `<p class="text-xs text-slate-500">No active uploads.</p>`;
-        unlockedDiv.innerHTML = `<p class="text-xs text-slate-500">You haven't unlocked any files yet.</p>`;
+        storeDiv.innerHTML = `<div class="text-center py-12 glass-panel rounded-3xl"><i class="fa-solid fa-folder-open text-gray-600 text-3xl mb-3"></i><p class="text-sm text-gray-400">Henüz dosya yüklenmedi.</p></div>`;
+        adminDiv.innerHTML = `<div class="bg-black/30 p-4 rounded-2xl border border-white/5 text-center"><p class="text-xs text-gray-500">Sistemde dosya yok.</p></div>`;
+        unlockedDiv.innerHTML = `<div class="text-center py-6 bg-black/20 rounded-2xl border border-white/5"><p class="text-xs text-gray-500">You haven't unlocked any files yet.</p></div>`;
         return;
       }
 
-      storeDiv.innerHTML = ''; adminDiv.innerHTML = ''; unlockedDiv.innerHTML = '';
+      let storeHtml = '';
+      let adminHtml = '';
+      let unlockedHtml = '';
       let unlockedCheck = false;
 
       window.dbFiles.forEach(f => {
         const isUnlocked = (window.currentUserData.unlockedFiles || []).includes(f.id);
         const activePrice = (f.discountPrice && f.discountPrice > 0) ? f.discountPrice : f.price;
 
-        // Mağaza Kartı Görünümü
-        storeDiv.innerHTML += `
-          <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-4 flex flex-col space-y-4 relative">
-            ${(f.discountPrice > 0 && !isUnlocked) ? `<div class="absolute top-0 right-0 bg-red-500 text-white text-[9px] font-black px-3 py-1 rounded-bl-xl">SALE</div>` : ''}
-            <div class="flex items-start space-x-3">
-              <div class="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20 shrink-0">
-                <i class="fa-solid fa-cloud-arrow-down text-indigo-400 text-xl animate-pulse"></i>
+        storeHtml += `
+          <div class="glass-panel rounded-3xl p-5 flex flex-col space-y-4 relative overflow-hidden group">
+            ${(f.discountPrice > 0 && !isUnlocked) ? `<div class="absolute top-3 right-3 bg-red-500/20 text-red-400 text-[9px] font-extrabold px-2 py-1 rounded-md border border-red-500/30">SALE</div>` : ''}
+            <div class="flex items-center space-x-4">
+              <div class="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 shrink-0 group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-file-zipper text-blue-400 text-xl"></i>
               </div>
               <div class="space-y-1 min-w-0 pr-8">
                 <h4 class="font-bold text-sm text-white truncate">${f.name}</h4>
-                <p class="text-[10px] text-slate-500 font-mono truncate"><i class="fa-brands fa-dropbox mr-1"></i>Dropbox / Cloud Hosted</p>
+                <p class="text-[10px] text-gray-400 font-medium truncate"><i class="fa-solid fa-link mr-1"></i>Secure Cloud Storage</p>
               </div>
             </div>
-            <div class="flex items-center justify-between pt-3 border-t border-slate-800">
+            <div class="flex items-center justify-between pt-4 border-t border-white/5">
               <div>
-                ${isUnlocked ? `<span class="text-[10px] text-emerald-400 font-black bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">UNLOCKED</span>` : `<span class="text-base font-black text-white">$${Number(activePrice).toFixed(4)}</span>`}
+                ${isUnlocked ? `<span class="text-[10px] text-green-400 font-bold bg-green-500/10 px-3 py-1.5 rounded-xl border border-green-500/20"><i class="fa-solid fa-check mr-1"></i>OWNED</span>` : `<span class="text-lg font-extrabold text-white">$${Number(activePrice).toFixed(4)}</span>`}
               </div>
               <div>
-                ${isUnlocked ? `<button onclick="copyToClipboard('${f.url}')" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-2 rounded-xl flex items-center space-x-1.5 transition active:scale-95"><i class="fa-regular fa-copy"></i><span>Get Link</span></button>` : `<button onclick="buyFile('${f.id}', ${activePrice})" class="bg-indigo-500 text-white font-black text-xs px-4 py-2 rounded-xl flex items-center space-x-1.5 transition active:scale-95"><i class="fa-solid fa-cart-shopping"></i><span>Unlock</span></button>`}
+                ${isUnlocked 
+                  ? `<button onclick="copyToClipboard('${f.url}')" class="bg-white text-black font-bold text-xs px-5 py-2.5 rounded-xl flex items-center space-x-2 transition active:scale-95"><i class="fa-regular fa-copy"></i><span>Kopyala</span></button>` 
+                  : `<button onclick="buyFile('${f.id}', ${activePrice})" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl flex items-center space-x-2 transition shadow-[0_0_15px_rgba(37,99,235,0.3)] active:scale-95"><i class="fa-solid fa-unlock"></i><span>Unlock</span></button>`}
               </div>
             </div>
           </div>
         `;
 
-        // Profil Sayfasındaki İndirme Alanı
         if (isUnlocked) {
           unlockedCheck = true;
-          unlockedDiv.innerHTML += `
-            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
-              <span class="text-xs font-bold text-slate-300 truncate pr-4">${f.name}</span>
-              <button onclick="copyToClipboard('${f.url}')" class="bg-slate-800 text-slate-300 p-2 rounded-lg hover:bg-slate-700"><i class="fa-regular fa-copy"></i></button>
+          unlockedHtml += `
+            <div class="bg-black/40 p-4 rounded-2xl border border-white/5 flex justify-between items-center group">
+              <div class="min-w-0 pr-4">
+                <p class="text-sm font-bold text-gray-200 truncate">${f.name}</p>
+                <p class="text-[10px] text-green-400 mt-0.5">Unlocked</p>
+              </div>
+              <button onclick="copyToClipboard('${f.url}')" class="bg-white/10 text-white p-3 rounded-xl hover:bg-white/20 transition active:scale-95"><i class="fa-regular fa-copy"></i></button>
             </div>`;
         }
 
-        // Admin Yönetim Listesi
         if (window.userUid === ADMIN_ID) {
-          adminDiv.innerHTML += `
-            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
-              <div class="min-w-0 pr-4"><p class="text-xs font-bold text-slate-300 truncate">${f.name}</p><p class="text-[10px] text-slate-500">$${f.price}</p></div>
-              <button onclick="deleteDocById('${f.id}')" class="bg-red-500/10 text-red-400 p-2 rounded-lg hover:bg-red-500/25"><i class="fa-regular fa-trash-can"></i></button>
+          adminHtml += `
+            <div class="bg-black/50 p-4 rounded-2xl border border-white/5 flex justify-between items-center">
+              <div class="min-w-0 pr-4">
+                <p class="text-sm font-bold text-gray-200 truncate">${f.name}</p>
+                <p class="text-[10px] text-blue-400 mt-0.5">Fiyat: $${f.price}</p>
+              </div>
+              <button onclick="openConfirmModal('${f.id}', '${f.name.replace(/'/g, "\\'")}')" class="bg-red-500/10 text-red-400 p-3 rounded-xl hover:bg-red-500 hover:text-white transition active:scale-95 border border-red-500/20"><i class="fa-regular fa-trash-can"></i></button>
             </div>`;
         }
       });
 
-      if (!unlockedCheck) unlockedDiv.innerHTML = `<p class="text-xs text-slate-500">You haven't unlocked any cloud links yet.</p>`;
-    }
-
-    // SATIN ALMA AKIŞI
-    window.buyFile = async (fileId, price) => {
-      if (window.currentUserData.balance < price) { window.showNotification("❌ Insufficient balance!"); return; }
-      const ref = doc(db, 'artifacts', DB_APP_ID, 'users', window.userUid, 'profile', 'data');
-      await updateDoc(ref, {
-        balance: Number((window.currentUserData.balance - price).toFixed(6)),
-        unlockedFiles: [...(window.currentUserData.unlockedFiles || []), fileId]
-      });
-      window.showNotification("🎉 Dropbox link unlocked! Check your Profile.");
-    };
-
-    // ADMİN: YENİ BULUT DOSYASI YÜKLEME (Dropbox, Mega vb. Destekler)
-    window.publishFile = async () => {
-      const name = document.getElementById('admin-file-name').value;
-      const url = document.getElementById('admin-file-url').value;
-      const price = Number(document.getElementById('admin-file-price').value);
-      const discount = Number(document.getElementById('admin-file-discount').value);
-
-      if (!name || !url || isNaN(price)) { window.showNotification("❌ Please complete all required inputs."); return; }
+      storeDiv.innerHTML = storeHtml;
       
-      // Bulut Link Kontrol Uyarısı (Opsiyonel Bilgi)
-      if (!url.includes("dropbox.com") && !url.includes("drive.google") && !url.includes("onedrive") && !url.includes("mega.nz")) {
-        window.showNotification("⚠️ Recommended to use Cloud URL (Dropbox/OneDrive/Mega)!");
+      if (window.userUid === ADMIN_ID) {
+         adminDiv.innerHTML = adminHtml;
       }
 
-      await addDoc(collection(db, 'artifacts', DB_APP_ID, 'public', 'data', 'files'), {
-        name, url, price, discountPrice: discount || null, createdAt: new Date().toISOString()
-      });
+      if (!unlockedCheck) {
+         unlockedDiv.innerHTML = `<div class="text-center py-6 bg-black/20 rounded-2xl border border-white/5"><p class="text-xs text-gray-500">You haven't unlocked any files yet.</p></div>`;
+      } else {
+         unlockedDiv.innerHTML = unlockedHtml;
+      }
+    }
+
+    // SATIN ALMA
+    window.buyFile = async (fileId, price) => {
+      if (window.currentUserData.balance < price) { window.showNotification("Yetersiz bakiye! Lütfen reklam izleyerek kredi kazanın.", "error"); return; }
+      try {
+        const ref = doc(db, 'artifacts', DB_APP_ID, 'users', window.userUid, 'profile', 'data');
+        await updateDoc(ref, {
+          balance: Number((window.currentUserData.balance - price).toFixed(6)),
+          unlockedFiles: [...(window.currentUserData.unlockedFiles || []), fileId]
+        });
+        window.showNotification("🎉 Dosya başarıyla açıldı! Profil sekmesine bak.", "success");
+      } catch (err) {
+        window.showNotification("Satın alma sırasında bir hata oluştu.", "error");
+      }
+    };
+
+    // ADMİN: DOSYA EKLEME (Try-Catch İle Hata Tespiti)
+    window.publishFile = async () => {
+      const btn = document.getElementById('publishBtn');
+      const name = document.getElementById('admin-file-name').value.trim();
+      const url = document.getElementById('admin-file-url').value.trim();
+      const price = Number(document.getElementById('admin-file-price').value);
+      const discount = document.getElementById('admin-file-discount').value ? Number(document.getElementById('admin-file-discount').value) : null;
+
+      if (!name || !url || isNaN(price)) { 
+        window.showNotification("Lütfen başlık, link ve fiyat alanlarını doldur.", "error"); 
+        return; 
+      }
       
-      window.showNotification("✅ Cloud resource published!");
-      document.getElementById('admin-file-name').value = ''; 
-      document.getElementById('admin-file-url').value = '';
-      document.getElementById('admin-file-price').value = '';
-      document.getElementById('admin-file-discount').value = '';
+      try {
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...`;
+        btn.disabled = true;
+
+        await addDoc(collection(db, 'artifacts', DB_APP_ID, 'public', 'data', 'files'), {
+          name, 
+          url, 
+          price, 
+          discountPrice: discount, 
+          createdAt: new Date().toISOString()
+        });
+        
+        window.showNotification("✅ Dosya başarıyla sisteme eklendi!", "success");
+        
+        // Formu temizle
+        document.getElementById('admin-file-name').value = ''; 
+        document.getElementById('admin-file-url').value = '';
+        document.getElementById('admin-file-price').value = '';
+        document.getElementById('admin-file-discount').value = '';
+      } catch(err) {
+        console.error("Ekleme Hatası:", err);
+        window.showNotification("Hata: Dosya eklenemedi! Yetki sorunu olabilir.", "error");
+      } finally {
+        btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Dosyayı Yayınla`;
+        btn.disabled = false;
+      }
     };
 
-    // ADMİN: DOSYA SİLME
-    window.deleteDocById = async (fileId) => {
-      await deleteDoc(doc(db, 'artifacts', DB_APP_ID, 'public', 'data', 'files', fileId));
-      window.showNotification("🗑️ File permanently deleted.");
+    // ONAY MODALI AÇMA
+    window.openConfirmModal = (fileId, fileName) => {
+      window.itemToDelete = fileId;
+      document.getElementById('confirm-modal-text').innerHTML = `<b>${fileName}</b> dosyasını silmek istediğine emin misin?`;
+      
+      const modal = document.getElementById('confirm-modal');
+      const box = document.getElementById('confirm-box');
+      modal.classList.remove('hidden');
+      
+      requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        box.classList.remove('scale-95');
+      });
     };
 
-    // 3. GARANTİLİ REKLAM İZLEME VE BAKİYE ÖDÜLÜ ($0.002) - 12 SANİYE KURALI
-    let adWatchInProgress = false; // Aynı anda birden fazla tıklamayı önler
+    // ONAY MODALI KAPATMA
+    window.closeConfirmModal = () => {
+      window.itemToDelete = null;
+      const modal = document.getElementById('confirm-modal');
+      const box = document.getElementById('confirm-box');
+      
+      modal.classList.add('opacity-0');
+      box.classList.add('scale-95');
+      
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    };
 
-    const adButton = document.getElementById('ad-button');
-    adButton.addEventListener('click', () => {
-      if (adWatchInProgress) return; // Zaten izliyorsa basmasını engelle
+    // ADMİN: DOSYA SİLME (Modal Onaylandıktan Sonra)
+    window.executeDelete = async () => {
+      if(!window.itemToDelete) return;
+      const id = window.itemToDelete;
+      window.closeConfirmModal();
+
+      try {
+        await deleteDoc(doc(db, 'artifacts', DB_APP_ID, 'public', 'data', 'files', id));
+        window.showNotification("🗑️ Dosya kalıcı olarak silindi.", "success");
+      } catch(err) {
+        console.error("Silme Hatası:", err);
+        window.showNotification("Silme başarısız! Yetki hatası.", "error");
+      }
+    };
+
+    // REKLAM İZLEME VE BAKİYE KAZANMA
+    let adWatchInProgress = false;
+
+    document.getElementById('ad-button').addEventListener('click', () => {
+      if (adWatchInProgress) return;
 
       const today = new Date().toDateString();
       let watched = window.currentUserData.dailyAdsWatched || 0;
-      
-      // Gün sıfırlama kontrolü
       if (window.currentUserData.lastAdWatchedDate !== today) watched = 0;
-      
-      if (watched >= 100) { window.showNotification("⚠️ Daily limit reached! 100/100"); return; }
+      if (watched >= 100) { window.showNotification("Günlük izleme limitine (100) ulaştınız!", "error"); return; }
 
       adWatchInProgress = true;
-
-      // 1. Reklam yükleme kilit ekranı gösterimi başlar
       const loadingScreen = document.getElementById('ad-loading-screen');
       const timerDisplay = document.getElementById('ad-timer');
       loadingScreen.classList.remove('hidden');
       
-      let timeLeft = 12; // 12 Saniye kuralı
+      let timeLeft = 12;
       timerDisplay.textContent = timeLeft;
 
-      // 2. RichAds Interstitial Video API Çağrısı Arkaplanda Tetiklenir (Hatalara karşı bağımsız çalışır)
-      try {
-        window.richadsController.triggerInterstitialVideo().catch(() => {
-          console.warn("RichAds API caught an internal error, continuing with fallback timer.");
-        });
-      } catch (err) {
-        console.warn("RichAds Trigger skipped:", err);
-      }
+      try { window.richadsController.triggerInterstitialVideo().catch(()=>{}); } catch (err) {}
 
-      // 3. Garantili Zamanlayıcı (Timer) - RichAds yanıtından bağımsız olarak süreyi tutar
       const countdownInterval = setInterval(() => {
         timeLeft--;
         timerDisplay.textContent = timeLeft;
 
         if (timeLeft <= 0) {
           clearInterval(countdownInterval);
-          
-          // 12 saniye dolduğunda kilit ekranını kapat ve ödülü ver!
           loadingScreen.classList.add('hidden');
           adWatchInProgress = false;
 
           const ref = doc(db, 'artifacts', DB_APP_ID, 'users', window.userUid, 'profile', 'data');
           updateDoc(ref, {
-            balance: Number((window.currentUserData.balance + 0.002).toFixed(6)), // Kazanç 0.002$ olarak kesin verildi
+            balance: Number((window.currentUserData.balance + 0.002).toFixed(6)),
             dailyAdsWatched: watched + 1,
             lastAdWatchedDate: today
           }).then(() => {
-            window.showNotification("🎉 Reward +$0.0020 added!");
+            window.showNotification("Tebrikler! +$0.0020 kazandın.", "success");
           }).catch((err) => {
-            console.error("Ödül tanımlanamadı:", err);
-            window.showNotification("❌ Reward system error.");
+            window.showNotification("Ödül verilirken hata oluştu.", "error");
           });
         }
-      }, 1000); // Her 1 saniyede bir çalışır
+      }, 1000);
     });
 
-    // SİSTEMİ BAŞLAT
+    // UYGULAMAYI BAŞLAT
     startApp();
   </script>
 
-  <!-- SEKMELER ARASI GEÇİŞ VE YARDIMCI SCRIPTLER -->
+  <!-- TAB GEÇİŞLERİ VE KOPYALAMA ARAÇLARI -->
   <script>
     function switchTab(tabName) {
       ['store', 'earn', 'profile', 'admin'].forEach(tab => {
@@ -580,43 +669,30 @@
         if(tabEl) {
           if (tab === tabName) {
             tabEl.classList.remove('hidden');
-            if(navEl) { navEl.classList.add('text-cyan-400'); navEl.classList.remove('text-slate-500'); }
-            
-            // Kullanıcı Mağazada Gezerken Arada Bir Interstitial Banner Çıkarması (%20 ihtimal)
-            if(tabName === 'store' && Math.random() < 0.2) {
-                if(window.richadsController) {
-                  try {
-                    window.richadsController.triggerInterstitialBanner().catch(()=>{});
-                  } catch(e) {}
-                }
+            if(navEl) { 
+              navEl.classList.add('text-blue-400', 'bg-white/5'); 
+              navEl.classList.remove('text-gray-500'); 
             }
           } else {
             tabEl.classList.add('hidden');
-            if(navEl) { navEl.classList.remove('text-cyan-400'); navEl.classList.add('text-slate-500'); }
+            if(navEl) { 
+              navEl.classList.remove('text-blue-400', 'bg-white/5'); 
+              navEl.classList.add('text-gray-500'); 
+            }
           }
         }
       });
     }
 
-    // Bildirim Kutusu
-    window.showNotification = function(msg) {
-      const box = document.getElementById('alert-box');
-      document.getElementById('alert-text').textContent = msg;
-      box.classList.remove('hidden');
-      setTimeout(() => box.classList.add('hidden'), 3500);
-    }
-
-    // Linkleri Kopyalama Aracı
     window.copyToClipboard = (text) => {
       const el = document.createElement('textarea');
       el.value = text; document.body.appendChild(el);
       el.select(); document.execCommand('copy');
       document.body.removeChild(el);
-      window.showNotification("📋 Cloud URL copied safely!");
+      window.showNotification("Link panoya kopyalandı!", "success");
     };
   </script>
 </body>
 </html>
-
 
 ```

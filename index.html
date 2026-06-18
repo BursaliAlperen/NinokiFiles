@@ -1,13 +1,12 @@
-```html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>NINOKI PREMIUM FILES</title>
+  <title>NINOKI PREMIUM DOSYA DEPOSU</title>
   
   <!-- TELEGRAM WEB APP SDK -->
-  <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   
   <!-- RICHADS SDK -->
   <script src="https://richinfo.co/richpartners/telegram/js/tg-ob.js"></script>
@@ -23,19 +22,11 @@
         extend: { 
           fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
           colors: {
-            bgDark: '#050505',
-            panelDark: '#121214',
-            panelLighter: '#1a1a1f',
-            accent: '#3b82f6',
-            accentGlow: '#60a5fa'
-          },
-          animation: {
-            'fade-in': 'fadeIn 0.3s ease-out',
-            'slide-up': 'slideUp 0.4s ease-out'
-          },
-          keyframes: {
-            fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-            slideUp: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
+            bgDark: '#030305',
+            panelDark: '#0e0f14',
+            panelLighter: '#15161d',
+            accentBlue: '#2563eb',
+            accentGlow: '#3b82f6'
           }
         } 
       }
@@ -43,33 +34,34 @@
   </script>
 
   <style>
+    /* Tarayıcı kaydırma çubuklarını gizle */
     ::-webkit-scrollbar { display: none; }
     body { 
       -webkit-touch-callout: none; 
       -webkit-user-select: none; 
       user-select: none; 
-      background-color: #050505; 
-      background-image: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+      background-color: #030305; 
+      background-image: radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.12) 0%, transparent 60%);
       background-attachment: fixed;
     }
-    .glass-panel {
-      background: rgba(18, 18, 20, 0.6);
+    .glass-effect {
+      background: rgba(14, 15, 20, 0.7);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
-    .glass-nav {
-      background: rgba(10, 10, 12, 0.85);
+    .glass-navigation {
+      background: rgba(8, 9, 12, 0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .ad-loader { 
-      border: 3px solid rgba(16, 185, 129, 0.2); 
-      border-top: 3px solid #10b981; 
+    .loader-spin { 
+      border: 3px solid rgba(37, 99, 235, 0.2); 
+      border-top: 3px solid #3b82f6; 
       border-radius: 50%; 
-      width: 40px; 
-      height: 40px; 
+      width: 44px; 
+      height: 44px; 
       animation: spin 1s linear infinite; 
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -77,71 +69,72 @@
 </head>
 <body class="text-white min-h-screen flex flex-col justify-between overflow-x-hidden pb-28">
 
-  <!-- HEADER -->
-  <header class="sticky top-0 z-40 glass-panel px-5 py-4 flex items-center justify-between shadow-lg shadow-black/20">
+  <!-- ÜST HEADER (Kullanıcı Bakiyesi ve Logo) -->
+  <header class="sticky top-0 z-40 glass-effect px-5 py-4 flex items-center justify-between shadow-lg shadow-black/40">
     <div class="flex items-center space-x-3">
-      <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.4)]">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-[0_0_15px_rgba(37,99,235,0.4)] animate-pulse">
         <i class="fa-solid fa-cloud-bolt text-white text-lg"></i>
       </div>
       <div>
-        <h1 class="text-base font-extrabold tracking-wide text-white">NINOKI <span class="text-blue-400">PRO</span></h1>
-        <p class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">Premium Vault</p>
+        <h1 class="text-base font-extrabold tracking-wide text-white">NINOKI <span class="text-blue-500">PRO</span></h1>
+        <p class="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Premium Depo</p>
       </div>
     </div>
 
-    <!-- BALANCE -->
-    <div class="bg-black/50 border border-green-500/20 rounded-full px-4 py-2 flex items-center space-x-2 shadow-inner">
+    <!-- Canlı Bakiye Göstergesi -->
+    <div class="bg-black/60 border border-green-500/20 rounded-full px-4 py-2 flex items-center space-x-2 shadow-inner">
       <i class="fa-solid fa-wallet text-green-400"></i>
       <span id="header-balance" class="text-sm font-bold text-green-400">$0.0000</span>
     </div>
   </header>
 
-  <!-- MAIN CONTENT -->
+  <!-- ANA PANEL İÇERİĞİ -->
   <main class="flex-1 p-5 max-w-lg mx-auto w-full">
 
-    <!-- STORE TAB -->
-    <div id="tab-store" class="space-y-6 animate-fade-in">
-      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-900/40 to-blue-900/20 border border-blue-500/20 p-6 shadow-2xl">
-        <div class="absolute -right-10 -top-10 w-32 h-32 bg-blue-500/20 blur-3xl rounded-full"></div>
+    <!-- TAB 1: MAĞAZA (STORE) -->
+    <div id="tab-store" class="space-y-6">
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-950/40 to-blue-950/20 border border-blue-500/20 p-6 shadow-2xl">
+        <div class="absolute -right-10 -top-10 w-32 h-32 bg-blue-500/15 blur-3xl rounded-full"></div>
         <div class="space-y-2 relative z-10">
           <span class="bg-blue-500/10 text-blue-400 text-[10px] uppercase font-bold tracking-widest px-3 py-1.5 rounded-full border border-blue-500/20">
-            <i class="fa-solid fa-bolt text-yellow-400 mr-1"></i> VIP Access
+            <i class="fa-solid fa-bolt text-yellow-400 mr-1"></i> VIP ERİŞİM
           </span>
-          <h2 class="text-2xl font-extrabold text-white mt-2 leading-tight">Unlock Premium<br>Cloud Files</h2>
-          <p class="text-xs text-gray-400 leading-relaxed font-medium">Watch sponsored videos to earn credits and gain lifetime access to exclusive archives.</p>
+          <h2 class="text-2xl font-extrabold text-white mt-2 leading-tight">Premium Bulut<br>Dosyalarını Aç</h2>
+          <p class="text-xs text-gray-400 leading-relaxed font-medium">Sponsorlu videolar izleyerek kredi kazanın ve özel arşivlere sınırsız erişim sağlayın.</p>
         </div>
       </div>
 
       <div class="flex items-center justify-between px-1">
-        <h3 class="text-sm font-bold text-gray-300">Available Packages</h3>
-        <span id="store-count" class="text-xs text-blue-400 font-semibold bg-blue-500/10 px-3 py-1 rounded-full">Loading...</span>
+        <h3 class="text-sm font-bold text-gray-300">Aktif Paketler</h3>
+        <span id="store-count" class="text-xs text-blue-400 font-semibold bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">0 dosya</span>
       </div>
 
+      <!-- Yüklenen Dosyalar Listesi -->
       <div id="files-list" class="grid grid-cols-1 gap-4">
-        <!-- Loader State -->
-        <div class="text-center py-12 glass-panel rounded-3xl">
-          <i class="fa-solid fa-circle-notch fa-spin text-blue-500 text-2xl mb-3"></i>
-          <p class="text-sm text-gray-400">Retrieving secure cloud vault...</p>
+        <div class="text-center py-12 glass-effect rounded-3xl">
+          <div class="loader-spin mx-auto mb-3"></div>
+          <p class="text-sm text-gray-400 font-medium">Güvenli sunucu bağlantısı kuruluyor...</p>
         </div>
       </div>
     </div>
 
-    <!-- EARN TAB -->
-    <div id="tab-earn" class="space-y-6 hidden animate-fade-in">
-      <div class="text-center space-y-4 glass-panel p-8 rounded-3xl">
+    <!-- TAB 2: KAZANÇ (EARN) -->
+    <div id="tab-earn" class="space-y-6 hidden">
+      <div class="text-center space-y-4 glass-effect p-8 rounded-3xl">
         <div class="w-20 h-20 bg-gradient-to-br from-green-500/20 to-emerald-500/10 rounded-full flex items-center justify-center mx-auto border border-green-500/30 shadow-[0_0_30px_rgba(16,185,129,0.15)] relative">
           <div class="absolute inset-0 rounded-full border-2 border-green-400/50 animate-ping opacity-20"></div>
-          <i class="fa-solid fa-play text-green-400 text-3xl ml-1"></i>
+          <i class="fa-solid fa-circle-play text-green-400 text-3xl"></i>
         </div>
         <div class="space-y-2">
-          <h3 class="text-xl font-bold text-white">Earn Cloud Credits</h3>
-          <p class="text-xs text-gray-400 font-medium">Watch short sponsor advertisements to instantly credit your balance.</p>
+          <h3 class="text-xl font-bold text-white">Bakiye Kazanın</h3>
+          <p class="text-xs text-gray-400 font-medium font-sans">Sponsor reklam görevlerini tamamlayarak cüzdan bakiyenizi anında güncelleyin.</p>
         </div>
         
+        <!-- Günlük Limit -->
         <div class="pt-4 w-full">
           <div class="bg-black/40 rounded-2xl p-4 border border-white/5">
             <div class="flex justify-between text-xs mb-2">
-              <span class="text-gray-400 font-medium">Daily Limit</span>
+              <span class="text-gray-400 font-medium">Günlük İzleme Limiti</span>
               <span id="daily-ads-text" class="font-bold text-white">0 / 100</span>
             </div>
             <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden">
@@ -151,161 +144,154 @@
         </div>
       </div>
 
-      <div class="glass-panel border-green-500/20 rounded-3xl p-5 flex items-center justify-between group hover:border-green-500/40 transition-all">
+      <!-- REKLAM İZLEME TASKI -->
+      <div class="glass-effect border-green-500/20 rounded-3xl p-5 flex items-center justify-between group hover:border-green-500/40 transition-all">
         <div class="space-y-1">
           <h5 class="font-bold text-sm text-white flex items-center gap-2">
-            RichAds Sponsor <span class="flex h-2 w-2 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span>
+            RichAds Sponsor Videosu <span class="flex h-2 w-2 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span>
           </h5>
-          <p class="text-[11px] text-green-400 font-bold"><i class="fa-solid fa-coins mr-1"></i>Reward: +$0.0020</p>
+          <p class="text-[11px] text-green-400 font-bold"><i class="fa-solid fa-coins mr-1"></i>Kazanç: +$0.0020</p>
         </div>
         
         <button id="ad-button" class="bg-white text-black font-bold text-xs py-3 px-6 rounded-2xl flex items-center space-x-2 transition-transform active:scale-95 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-          <i class="fa-solid fa-video"></i>
-          <span>Watch</span>
+          <i class="fa-solid fa-play"></i>
+          <span>İzle</span>
         </button>
       </div>
     </div>
 
-    <!-- PROFILE TAB -->
-    <div id="tab-profile" class="space-y-6 hidden animate-fade-in">
-      <div class="glass-panel rounded-3xl p-8 flex flex-col items-center text-center relative overflow-hidden">
+    <!-- TAB 3: PROFİL (PROFILE) -->
+    <div id="tab-profile" class="space-y-6 hidden">
+      <div class="glass-effect rounded-3xl p-8 flex flex-col items-center text-center relative overflow-hidden">
         <div class="absolute top-0 w-full h-32 bg-gradient-to-b from-blue-600/10 to-transparent"></div>
         <div class="w-20 h-20 bg-panelLighter rounded-full flex items-center justify-center border-4 border-bgDark shadow-xl relative z-10 mb-4">
           <i class="fa-solid fa-user-astronaut text-3xl text-gray-300"></i>
         </div>
         <div class="space-y-1 relative z-10">
-          <h3 id="profile-name" class="font-bold text-lg text-white">Loading...</h3>
+          <h3 id="profile-name" class="font-bold text-lg text-white">Kullanıcı</h3>
           <p id="profile-id" class="text-xs text-blue-400 font-mono bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20 inline-block mt-2">ID: ---</p>
         </div>
         
         <div class="w-full grid grid-cols-2 gap-4 pt-6 relative z-10">
           <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
-            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Total Balance</span>
+            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Mevcut Bakiye</span>
             <p id="profile-balance" class="text-lg font-bold text-green-400 mt-1">$0.0000</p>
           </div>
           <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
-            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Unlocked</span>
+            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Açılan Dosyalar</span>
             <p id="profile-unlocked-count" class="text-lg font-bold text-blue-400 mt-1">0</p>
           </div>
         </div>
       </div>
 
-      <div class="glass-panel rounded-3xl p-6">
-        <h4 class="text-xs font-bold uppercase text-gray-400 tracking-widest mb-4"><i class="fa-solid fa-vault mr-2"></i>My Vault</h4>
+      <div class="glass-effect rounded-3xl p-6">
+        <h4 class="text-xs font-bold uppercase text-gray-400 tracking-widest mb-4"><i class="fa-solid fa-vault mr-2"></i>Kütüphanem</h4>
         <div id="unlocked-files-list" class="space-y-3">
-          <div class="text-center py-6 bg-black/20 rounded-2xl border border-white/5"><p class="text-xs text-gray-500">You haven't unlocked any files yet.</p></div>
+          <div class="text-center py-6 bg-black/20 rounded-2xl border border-white/5"><p class="text-xs text-gray-500">Henüz açılmış bir dosyanız bulunmuyor.</p></div>
         </div>
       </div>
     </div>
 
-    <!-- ADMIN TAB -->
-    <div id="tab-admin" class="space-y-6 hidden animate-fade-in">
+    <!-- TAB 4: ADMİN PANELİ (ADMIN) -->
+    <div id="tab-admin" class="space-y-6 hidden">
       <div class="bg-red-500/10 rounded-3xl p-6 border border-red-500/20">
         <div class="flex items-center space-x-3 mb-2">
           <div class="p-2 bg-red-500/20 rounded-lg"><i class="fa-solid fa-shield-halved text-red-400"></i></div>
-          <h3 class="text-sm font-bold text-red-400 uppercase tracking-widest">Admin Control</h3>
+          <h3 class="text-sm font-bold text-red-400 uppercase tracking-widest">Yönetim Paneli</h3>
         </div>
-        <p class="text-xs text-gray-400">Publish cloud files, define packages, and monitor vault listings.</p>
+        <p class="text-xs text-gray-400">Yeni Dropbox, Google Drive veya Mega linkleri tanımlayarak mağazaya ekleyebilirsiniz.</p>
       </div>
 
-      <!-- Add File -->
-      <div class="glass-panel rounded-3xl p-6">
-        <h4 class="text-sm font-bold text-white mb-5 flex items-center gap-2"><i class="fa-solid fa-plus text-blue-400"></i> Publish New File</h4>
+      <!-- Yeni Dosya Ekleme Formu -->
+      <div class="glass-effect rounded-3xl p-6">
+        <h4 class="text-sm font-bold text-white mb-5 flex items-center gap-2"><i class="fa-solid fa-plus text-blue-400"></i> Yeni Bulut Paketi Yayınla</h4>
         <div class="space-y-4">
           <div>
-            <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">File Title</label>
-            <input type="text" id="admin-file-name" placeholder="e.g., Premium Archive v2" class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+            <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">Dosya Adı</label>
+            <input type="text" id="admin-file-name" placeholder="Örn: VIP Database V2" class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
           </div>
           <div>
-            <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">Download Link (URL)</label>
-            <input type="url" id="admin-file-url" placeholder="https://dropbox.com/..." class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+            <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">Paylaşım Linki (URL)</label>
+            <input type="url" id="admin-file-url" placeholder="https://dropbox.com/s/..." class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">Price ($)</label>
+              <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">Ücret ($)</label>
               <input type="number" step="0.001" id="admin-file-price" placeholder="0.10" class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
             </div>
             <div>
-              <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">Discount Price (Optional)</label>
-              <input type="number" step="0.001" id="admin-file-discount" placeholder="Discount price" class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+              <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">İndirimli Fiyat (İsteğe Bağlı)</label>
+              <input type="number" step="0.001" id="admin-file-discount" placeholder="İndirim tutarı" class="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
             </div>
           </div>
         </div>
         <button onclick="publishFile()" id="publishBtn" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm py-4 rounded-2xl transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] active:scale-95 flex justify-center items-center gap-2">
-          <i class="fa-solid fa-cloud-arrow-up"></i> Publish File Package
+          <i class="fa-solid fa-cloud-arrow-up"></i> Dosya Paketini Yayınla
         </button>
       </div>
 
-      <!-- Manage Files -->
-      <div class="glass-panel rounded-3xl p-6">
-        <h4 class="text-xs font-bold uppercase text-gray-400 tracking-widest mb-4">Active System Packages</h4>
+      <!-- Dosya Yönetim Listesi -->
+      <div class="glass-effect rounded-3xl p-6">
+        <h4 class="text-xs font-bold uppercase text-gray-400 tracking-widest mb-4">Sistemdeki Aktif Paketler</h4>
         <div id="admin-files-list" class="space-y-3"></div>
       </div>
     </div>
 
   </main>
 
-  <!-- FLOATING BOTTOM NAVIGATION (IOS STYLE) -->
-  <nav class="fixed bottom-6 left-6 right-6 z-40 glass-nav rounded-3xl px-2 py-2 flex items-center justify-between shadow-2xl">
+  <!-- ALT NAVİGASYON (IOS FLOATING STYLE) -->
+  <nav class="fixed bottom-6 left-6 right-6 z-40 glass-navigation rounded-3xl px-2 py-2 flex items-center justify-between shadow-2xl">
     <button onclick="switchTab('store')" id="nav-store" class="nav-btn flex-1 flex flex-col items-center py-2 text-blue-400 transition-colors rounded-2xl bg-white/5">
-      <i class="fa-solid fa-shop text-lg mb-1"></i><span class="text-[9px] font-bold uppercase tracking-wider">Store</span>
+      <i class="fa-solid fa-shop text-lg mb-1"></i><span class="text-[9px] font-bold uppercase tracking-wider">Mağaza</span>
     </button>
     <button onclick="switchTab('earn')" id="nav-earn" class="nav-btn flex-1 flex flex-col items-center py-2 text-gray-500 hover:text-white transition-colors rounded-2xl">
-      <i class="fa-solid fa-circle-play text-lg mb-1"></i><span class="text-[9px] font-bold uppercase tracking-wider">Earn</span>
+      <i class="fa-solid fa-circle-play text-lg mb-1"></i><span class="text-[9px] font-bold uppercase tracking-wider">Kazan</span>
     </button>
     <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn flex-1 flex flex-col items-center py-2 text-gray-500 hover:text-white transition-colors rounded-2xl">
-      <i class="fa-solid fa-user text-lg mb-1"></i><span class="text-[9px] font-bold uppercase tracking-wider">Profile</span>
+      <i class="fa-solid fa-user text-lg mb-1"></i><span class="text-[9px] font-bold uppercase tracking-wider">Profil</span>
     </button>
     <button onclick="switchTab('admin')" id="nav-admin" class="nav-btn hidden flex-1 flex flex-col items-center py-2 text-red-500 hover:bg-red-500/10 transition-colors rounded-2xl">
-      <i class="fa-solid fa-shield-halved text-lg mb-1"></i><span class="text-[9px] font-bold uppercase tracking-wider">Admin</span>
+      <i class="fa-solid fa-shield-halved text-lg mb-1"></i><span class="text-[9px] font-bold uppercase tracking-wider">Yönetim</span>
     </button>
   </nav>
 
-  <!-- PREMIUM TOAST NOTIFICATION CONTAINER -->
+  <!-- TOAST BİLDİRİM KAPSAYICISI -->
   <div id="toast-container" class="fixed top-20 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 w-full max-w-sm px-4 pointer-events-none"></div>
 
-  <!-- ARE YOU SURE MODAL (DELETE CONFIRMATION) -->
-  <div id="confirm-modal" class="hidden fixed inset-0 z-[1000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-5 opacity-0 transition-opacity duration-300">
+  <!-- EMİN MİSİN POPUP'I (ONAY MODALI) -->
+  <div id="confirm-modal" class="hidden fixed inset-0 z-[1000] bg-black/85 backdrop-blur-sm flex items-center justify-center p-5 opacity-0 transition-opacity duration-300">
     <div id="confirm-box" class="bg-panelLighter border border-white/10 rounded-3xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300">
       <div class="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-4">
-        <i class="fa-solid fa-triangle-exclamation text-3xl text-red-500"></i>
+        <i class="fa-solid fa-triangle-exclamation text-3xl text-red-500 animate-bounce"></i>
       </div>
-      <h3 class="text-xl font-bold text-center text-white mb-2">Are you sure?</h3>
-      <p id="confirm-modal-text" class="text-sm text-gray-400 text-center mb-8">You are about to delete this file. This action cannot be undone.</p>
+      <h3 class="text-lg font-extrabold text-center text-white mb-2">Emin misiniz?</h3>
+      <p id="confirm-modal-text" class="text-xs text-gray-400 text-center mb-8 leading-relaxed">Bu dosyayı veri tabanından kalıcı olarak silmek üzeresiniz. Bu işlem geri alınamaz.</p>
       <div class="flex gap-3">
-        <button onclick="closeConfirmModal()" class="flex-1 bg-black/50 border border-white/10 text-white font-bold py-3.5 rounded-2xl hover:bg-white/5 transition active:scale-95">Cancel</button>
-        <button onclick="executeDelete()" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-2xl shadow-[0_0_15px_rgba(220,38,38,0.3)] transition active:scale-95">Yes, Delete</button>
+        <button onclick="closeConfirmModal()" class="flex-1 bg-black/50 border border-white/10 text-white font-bold py-3.5 rounded-2xl hover:bg-white/5 transition active:scale-95 text-xs">Vazgeç</button>
+        <button onclick="executeDelete()" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-2xl shadow-[0_0_15px_rgba(220,38,38,0.3)] transition active:scale-95 text-xs">Evet, Sil</button>
       </div>
     </div>
   </div>
   
-  <!-- SPONSOR ADS RUNNING SCREEN -->
+  <!-- REKLAM İZLEME KİLİT PANELİ -->
   <div id="ad-loading-screen" class="hidden fixed inset-0 z-[99999] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-5 text-center">
-    <div class="ad-loader mb-6"></div>
-    <h2 class="text-white font-bold text-xl mb-2">Displaying Sponsor Campaign</h2>
-    <p class="text-green-400 text-sm font-medium">Please wait. Keep this window open to receive rewards.</p>
+    <div class="loader-spin mb-6"></div>
+    <h2 class="text-white font-bold text-xl mb-2">Sponsor Reklamı Yayınlanıyor</h2>
+    <p class="text-green-400 text-sm font-medium">Lütfen bekleyin. Ödülünüzün tanımlanması için pencereyi kapatmayın.</p>
     <div class="mt-8 bg-black/50 px-6 py-3 rounded-2xl border border-white/10 flex items-center gap-3">
       <i class="fa-regular fa-clock text-gray-400"></i>
       <span class="text-white font-mono font-bold text-lg" id="ad-timer">12</span>
-      <span class="text-gray-400 text-xs font-medium">seconds remaining</span>
+      <span class="text-gray-400 text-xs font-medium">saniye kaldı</span>
     </div>
   </div>
 
-  <!-- SCRIPT SYSTEM MODULE -->
+  <!-- VERİ TABANI VE SİSTEM ÇALIŞTIRICILARI -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
     import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, addDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
     import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
-    // Initialize RichAds
-    window.richadsController = new window.TelegramAdsController();
-    window.richadsController.initialize({
-        pubId: "988708",
-        appId: "7803",
-        debug: false
-    });
-
-    // 1. Dynamic Config Parsing (Guaranteed not to crash)
+    // Dynamic configuration setup
     let firebaseConfig;
     try {
       firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
@@ -317,7 +303,7 @@
         appId: "1:210076686120:web:10773a358aa9a2989e221d"
       };
     } catch (e) {
-      console.error("Config parse failed, using fallback.");
+      console.error("Config load failed.");
     }
 
     const app = initializeApp(firebaseConfig);
@@ -328,10 +314,10 @@
 
     window.currentUserData = { balance: 0.0, dailyAdsWatched: 0, lastAdWatchedDate: "", unlockedFiles: [] };
     window.dbFiles = [];
-    window.tgId = null; // Save telegram ID separately
+    window.tgId = null; 
     window.itemToDelete = null; 
 
-    // Premium Toast Alerts
+    // Toast Alert notification system
     window.showNotification = function(msg, type = 'info') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
@@ -341,7 +327,7 @@
       if(type === 'success') { icon = '<i class="fa-solid fa-circle-check text-green-400"></i>'; border = 'border-green-500/30'; }
       if(type === 'error') { icon = '<i class="fa-solid fa-circle-xmark text-red-400"></i>'; border = 'border-red-500/30'; }
       
-      toast.className = `bg-panelLighter/90 backdrop-blur-md border ${border} text-white text-sm px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-[-20px] opacity-0 transition-all duration-300`;
+      toast.className = `bg-panelLighter/90 backdrop-blur-md border ${border} text-white text-xs px-4 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-[-20px] opacity-0 transition-all duration-300`;
       toast.innerHTML = `${icon} <span class="font-medium">${msg}</span>`;
       
       container.appendChild(toast);
@@ -358,56 +344,52 @@
       }, 3500);
     };
 
+    // Firebase Authentication flow
     async function startApp() {
-      let tgName = "Telegram User";
+      let tgName = "Telegram Kullanıcısı";
 
       try {
         if (window.Telegram && window.Telegram.WebApp) {
           const tg = window.Telegram.WebApp;
           tg.ready();
           tg.expand();
-          tg.setHeaderColor('#050505');
-          tg.setBackgroundColor('#050505');
+          tg.setHeaderColor('#030305');
+          tg.setBackgroundColor('#030305');
           if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             window.tgId = String(tg.initDataUnsafe.user.id);
             tgName = tg.initDataUnsafe.user.first_name + " " + (tg.initDataUnsafe.user.last_name || "");
           }
         }
       } catch (e) {
-        console.warn("Telegram container interface not active.");
+        console.warn("Telegram WebApp context down.");
       }
 
-      // 2. Auth First (Mandatory Rules)
-      const initAuth = async () => {
-        try {
-          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-            await signInWithCustomToken(auth, __initial_auth_token);
-          } else {
-            await signInAnonymously(auth);
-          }
-        } catch (err) {
-          console.error("Auth init error:", err);
-          await signInAnonymously(auth); // Final fallback
+      // RULE 3: Perform Auth First before any query
+      try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
         }
-      };
-      await initAuth();
+      } catch (err) {
+        console.warn("Initial authentication down, trying anonymous session:", err);
+        await signInAnonymously(auth);
+      }
 
-      // 3. Database operations ONLY after auth
       onAuthStateChanged(auth, async (user) => {
-        if (!user) return; // Guard clause
+        if (!user) return; // Prevent unauthorized data query crashes
         
-        // IMPORTANT FIX: We MUST use user.uid for database paths, not Telegram ID to prevent Permission Denied.
+        // Use user.uid for direct document authorization to prevent Permission Denied
         const userId = user.uid; 
         
         document.getElementById('profile-id').textContent = `ID: ${window.tgId ? window.tgId : userId.substring(0,8)}`;
         document.getElementById('profile-name').textContent = tgName;
 
-        // Verify Admin Status
         if (window.tgId === ADMIN_TELEGRAM_ID || userId === ADMIN_TELEGRAM_ID) {
           document.getElementById('nav-admin').classList.remove('hidden');
         }
 
-        // Fetch User profile using strict path: /artifacts/{appId}/users/{userId}/{collectionName}
+        // RULE 1: User data mapped to private path: /artifacts/{appId}/users/{userId}/profile/main
         const userDocRef = doc(db, 'artifacts', appId, 'users', userId, 'profile', 'main');
         
         onSnapshot(userDocRef, async (docSnap) => {
@@ -421,32 +403,33 @@
               window.currentUserData = data;
             }
           } else {
+            // Document creation automatically builds the "users" collection inside Firestore
             window.currentUserData = { 
               balance: 0.0, 
               dailyAdsWatched: 0, 
               lastAdWatchedDate: today, 
               unlockedFiles: [],
-              tgName: tgName // Save TG data inside the doc, not as the doc ID
+              tgName: tgName 
             };
             await setDoc(userDocRef, window.currentUserData, { merge: true });
           }
           syncUI();
           renderFiles();
         }, (err) => {
-          console.error("Error reading profile:", err);
+          console.error("Profile snapshot failure:", err);
         });
 
-        // Fetch Public Shared Files Collection using strict path
+        // RULE 1: Public files mapped to: /artifacts/{appId}/public/data/files
         const filesColRef = collection(db, 'artifacts', appId, 'public', 'data', 'files');
         onSnapshot(filesColRef, (snap) => {
           window.dbFiles = [];
           snap.forEach(d => window.dbFiles.push({ id: d.id, ...d.data() }));
-          // In-memory sort to prevent index errors
+          // Memory sorting to bypass Rule 2 query boundaries
           window.dbFiles.sort((a,b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
           renderFiles();
         }, (err) => {
-          console.error("Error loading vault:", err);
-          window.showNotification("Failed to load files.", "error");
+          console.error("Collection snapshot error:", err);
+          window.showNotification("Bulut deposu bağlantı hatası.", "error");
         });
       });
     }
@@ -458,32 +441,32 @@
       document.getElementById('profile-unlocked-count').textContent = `${(data.unlockedFiles || []).length}`;
       
       const count = data.dailyAdsWatched || 0;
-      document.getElementById('daily-ads-text').textContent = `${count} / 100 Watched`;
+      document.getElementById('daily-ads-text').textContent = `${count} / 100 İzleme`;
       document.getElementById('daily-ads-bar').style.width = `${(count / 100) * 100}%`;
     }
 
+    // Dynamic Card Listing System
     function renderFiles() {
       const storeDiv = document.getElementById('files-list');
       const adminDiv = document.getElementById('admin-files-list');
       const unlockedDiv = document.getElementById('unlocked-files-list');
       
-      document.getElementById('store-count').textContent = `${window.dbFiles.length} files`;
+      document.getElementById('store-count').textContent = `${window.dbFiles.length} paket`;
 
-      // Flawless AAA "No Files Available" State
+      // Gorgeous "No files found" fallback
       if (window.dbFiles.length === 0) {
-        const noFilesPlaceholder = `
-          <div class="text-center py-16 glass-panel rounded-3xl animate-fade-in border border-white/5">
-            <div class="w-20 h-20 bg-gradient-to-tr from-gray-800 to-gray-900 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner border border-white/5 relative">
-              <div class="absolute inset-0 rounded-full border border-gray-600 animate-ping opacity-20"></div>
-              <i class="fa-solid fa-folder-open text-gray-500 text-3xl"></i>
+        const emptyStateHTML = `
+          <div class="text-center py-16 glass-effect rounded-3xl border border-white/5 animate-fade-in">
+            <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/10">
+              <i class="fa-solid fa-box-open text-gray-500 text-2xl"></i>
             </div>
-            <h4 class="text-white font-extrabold text-lg mb-2 tracking-wide">Vault is Empty</h4>
-            <p class="text-xs text-gray-500 max-w-xs mx-auto px-4 font-medium leading-relaxed">There are currently no premium packages available. Please check back later for new exclusive uploads.</p>
+            <h4 class="text-white font-extrabold text-base mb-1">Şu anda dosya bulunmuyor</h4>
+            <p class="text-xs text-gray-500 max-w-xs mx-auto px-4 font-medium leading-relaxed">Depo sistemi şu anda boştur. Yeni paketler eklendiğinde burada listelenecektir.</p>
           </div>
         `;
-        storeDiv.innerHTML = noFilesPlaceholder;
-        adminDiv.innerHTML = `<div class="bg-black/30 p-5 rounded-2xl border border-white/5 text-center"><i class="fa-solid fa-ghost text-gray-600 text-xl mb-2"></i><p class="text-xs text-gray-500">No uploads present.</p></div>`;
-        unlockedDiv.innerHTML = `<div class="text-center py-8 bg-black/20 rounded-2xl border border-white/5"><i class="fa-solid fa-lock text-gray-600 text-xl mb-2"></i><p class="text-xs text-gray-500">You haven't unlocked any files yet.</p></div>`;
+        storeDiv.innerHTML = emptyStateHTML;
+        adminDiv.innerHTML = `<div class="bg-black/30 p-5 rounded-2xl border border-white/5 text-center"><p class="text-xs text-gray-500">Yüklü paket bulunmuyor.</p></div>`;
+        unlockedDiv.innerHTML = `<div class="text-center py-8 bg-black/20 rounded-2xl border border-white/5"><p class="text-xs text-gray-500 font-medium">Henüz açılmış bir dosyanız bulunmuyor.</p></div>`;
         return;
       }
 
@@ -497,25 +480,25 @@
         const activePrice = (f.discountPrice && f.discountPrice > 0) ? f.discountPrice : f.price;
 
         storeHtml += `
-          <div class="glass-panel rounded-3xl p-5 flex flex-col space-y-4 relative overflow-hidden group">
-            ${(f.discountPrice > 0 && !isUnlocked) ? `<div class="absolute top-3 right-3 bg-red-500/20 text-red-400 text-[9px] font-extrabold px-2 py-1 rounded-md border border-red-500/30">SALE</div>` : ''}
+          <div class="glass-effect rounded-3xl p-5 flex flex-col space-y-4 relative overflow-hidden group">
+            ${(f.discountPrice > 0 && !isUnlocked) ? `<div class="absolute top-3 right-3 bg-red-500/20 text-red-400 text-[9px] font-extrabold px-2 py-1 rounded-md border border-red-500/30">İNDİRİM</div>` : ''}
             <div class="flex items-center space-x-4">
               <div class="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 shrink-0 group-hover:scale-105 transition-transform">
                 <i class="fa-solid fa-file-zipper text-blue-400 text-xl"></i>
               </div>
               <div class="space-y-1 min-w-0 pr-8">
                 <h4 class="font-bold text-sm text-white truncate">${f.name}</h4>
-                <p class="text-[10px] text-gray-400 font-medium truncate"><i class="fa-solid fa-link mr-1"></i>Secure Cloud Storage</p>
+                <p class="text-[10px] text-gray-400 font-medium truncate"><i class="fa-solid fa-cloud mr-1"></i>Güvenli Bulut Deposu</p>
               </div>
             </div>
             <div class="flex items-center justify-between pt-4 border-t border-white/5">
               <div>
-                ${isUnlocked ? `<span class="text-[10px] text-green-400 font-bold bg-green-500/10 px-3 py-1.5 rounded-xl border border-green-500/20"><i class="fa-solid fa-check mr-1"></i>OWNED</span>` : `<span class="text-lg font-extrabold text-white">$${Number(activePrice).toFixed(4)}</span>`}
+                ${isUnlocked ? `<span class="text-[10px] text-green-400 font-bold bg-green-500/10 px-3 py-1.5 rounded-xl border border-green-500/20"><i class="fa-solid fa-check mr-1"></i>AÇILDI</span>` : `<span class="text-lg font-extrabold text-white">$${Number(activePrice).toFixed(4)}</span>`}
               </div>
               <div>
                 ${isUnlocked 
-                  ? `<button onclick="copyToClipboard('${f.url}')" class="bg-white text-black font-bold text-xs px-5 py-2.5 rounded-xl flex items-center space-x-2 transition active:scale-95"><i class="fa-regular fa-copy"></i><span>Copy URL</span></button>` 
-                  : `<button onclick="buyFile('${f.id}', ${activePrice})" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl flex items-center space-x-2 transition shadow-[0_0_15px_rgba(37,99,235,0.3)] active:scale-95"><i class="fa-solid fa-unlock"></i><span>Unlock</span></button>`}
+                  ? `<button onclick="copyToClipboard('${f.url}')" class="bg-white text-black font-bold text-xs px-5 py-2.5 rounded-xl flex items-center space-x-2 transition active:scale-95"><i class="fa-regular fa-copy"></i><span>Linki Kopyala</span></button>` 
+                  : `<button onclick="buyFile('${f.id}', ${activePrice})" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl flex items-center space-x-2 transition shadow-[0_0_15px_rgba(37,99,235,0.3)] active:scale-95"><i class="fa-solid fa-unlock"></i><span>Kilit Aç</span></button>`}
               </div>
             </div>
           </div>
@@ -527,19 +510,18 @@
             <div class="bg-black/40 p-4 rounded-2xl border border-white/5 flex justify-between items-center group">
               <div class="min-w-0 pr-4">
                 <p class="text-sm font-bold text-gray-200 truncate">${f.name}</p>
-                <p class="text-[10px] text-green-400 mt-0.5">Unlocked</p>
+                <p class="text-[10px] text-green-400 mt-0.5">Erişilebilir</p>
               </div>
               <button onclick="copyToClipboard('${f.url}')" class="bg-white/10 text-white p-3 rounded-xl hover:bg-white/20 transition active:scale-95"><i class="fa-regular fa-copy"></i></button>
             </div>`;
         }
 
-        // Only show to Admin
         if (window.tgId === ADMIN_TELEGRAM_ID || auth.currentUser?.uid === ADMIN_TELEGRAM_ID) {
           adminHtml += `
             <div class="bg-black/50 p-4 rounded-2xl border border-white/5 flex justify-between items-center">
               <div class="min-w-0 pr-4">
                 <p class="text-sm font-bold text-gray-200 truncate">${f.name}</p>
-                <p class="text-[10px] text-blue-400 mt-0.5">Price: $${f.price}</p>
+                <p class="text-[10px] text-blue-400 mt-0.5">Fiyat: $${f.price}</p>
               </div>
               <button onclick="openConfirmModal('${f.id}', '${f.name.replace(/'/g, "\\'")}')" class="bg-red-500/10 text-red-400 p-3 rounded-xl hover:bg-red-500 hover:text-white transition active:scale-95 border border-red-500/20"><i class="fa-regular fa-trash-can"></i></button>
             </div>`;
@@ -553,17 +535,17 @@
       }
 
       if (!unlockedCheck) {
-         unlockedDiv.innerHTML = `<div class="text-center py-8 bg-black/20 rounded-2xl border border-white/5"><i class="fa-solid fa-lock text-gray-600 text-xl mb-2"></i><p class="text-xs text-gray-500">You haven't unlocked any files yet.</p></div>`;
+         unlockedDiv.innerHTML = `<div class="text-center py-8 bg-black/20 rounded-2xl border border-white/5"><p class="text-xs text-gray-500">Henüz açılmış bir dosyanız bulunmuyor.</p></div>`;
       } else {
          unlockedDiv.innerHTML = unlockedHtml;
       }
     }
 
-    // Purchase Processing Logic
+    // Purchase Process
     window.buyFile = async (fileId, price) => {
       const user = auth.currentUser;
       if (!user) return;
-      if (window.currentUserData.balance < price) { window.showNotification("Insufficient balance! Watch ads to earn.", "error"); return; }
+      if (window.currentUserData.balance < price) { window.showNotification("Yetersiz bakiye! Reklam izleyerek kredi kazanın.", "error"); return; }
       
       try {
         const ref = doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'main');
@@ -571,14 +553,14 @@
           balance: Number((window.currentUserData.balance - price).toFixed(6)),
           unlockedFiles: [...(window.currentUserData.unlockedFiles || []), fileId]
         });
-        window.showNotification("🎉 Package unlocked successfully!", "success");
+        window.showNotification("🎉 Dosya kilidi açıldı! Profil sekmesini kontrol edin.", "success");
       } catch (err) {
-        console.error("Purchase error:", err);
-        window.showNotification("Transaction failed. System error.", "error");
+        console.error("Purchasing fault:", err);
+        window.showNotification("Satın alma işlemi tamamlanamadı.", "error");
       }
     };
 
-    // FIXED: Publish File using strict paths
+    // Auto Collection & Document creation for public files
     window.publishFile = async () => {
       const btn = document.getElementById('publishBtn');
       const name = document.getElementById('admin-file-name').value.trim();
@@ -587,14 +569,15 @@
       const discount = document.getElementById('admin-file-discount').value ? Number(document.getElementById('admin-file-discount').value) : null;
 
       if (!name || !url || isNaN(price)) { 
-        window.showNotification("Please fill in file title, link, and price.", "error"); 
+        window.showNotification("Lütfen dosya adı, link ve fiyat alanlarını doldurun.", "error"); 
         return; 
       }
       
       try {
-        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Publishing...`;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Yayınlanıyor...`;
         btn.disabled = true;
 
+        // Writing triggers the automatic creation of collections
         const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'files');
         await addDoc(collectionRef, {
           name, 
@@ -604,24 +587,24 @@
           createdAt: new Date().toISOString()
         });
         
-        window.showNotification("✅ File published to vault successfully!", "success");
+        window.showNotification("✅ Dosya başarıyla depoya eklendi!", "success");
         
         document.getElementById('admin-file-name').value = ''; 
         document.getElementById('admin-file-url').value = '';
         document.getElementById('admin-file-price').value = '';
         document.getElementById('admin-file-discount').value = '';
       } catch(err) {
-        console.error("Database Save Error:", err);
-        window.showNotification(`Upload Denied! Permission Error.`, "error");
+        console.error("Writing fault:", err);
+        window.showNotification(`Dosya eklenemedi! Yetki sorunu.`, "error");
       } finally {
-        btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Publish File Package`;
+        btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Dosya Paketini Yayınla`;
         btn.disabled = false;
       }
     };
 
     window.openConfirmModal = (fileId, fileName) => {
       window.itemToDelete = fileId;
-      document.getElementById('confirm-modal-text').innerHTML = `Are you sure you want to delete <b>${fileName}</b>?`;
+      document.getElementById('confirm-modal-text').innerHTML = `<b>${fileName}</b> dosyasını silmek istediğinize emin misiniz?`;
       
       const modal = document.getElementById('confirm-modal');
       const box = document.getElementById('confirm-box');
@@ -653,24 +636,25 @@
 
       try {
         await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'files', id));
-        window.showNotification("🗑️ File permanently deleted.", "success");
+        window.showNotification("🗑️ Dosya kalıcı olarak silindi.", "success");
       } catch(err) {
-        console.error("Delete Failed:", err);
-        window.showNotification("Deletion failed.", "error");
+        console.error("Deletion error:", err);
+        window.showNotification("Silme işlemi başarısız.", "error");
       }
     };
 
+    // Watch video campaign process
     let adWatchInProgress = false;
 
     document.getElementById('ad-button').addEventListener('click', () => {
       const user = auth.currentUser;
-      if (!user) { window.showNotification("Authenticating, please wait...", "error"); return; }
+      if (!user) { window.showNotification("Oturum doğrulanıyor, lütfen bekleyin...", "error"); return; }
       if (adWatchInProgress) return;
 
       const today = new Date().toDateString();
       let watched = window.currentUserData.dailyAdsWatched || 0;
       if (window.currentUserData.lastAdWatchedDate !== today) watched = 0;
-      if (watched >= 100) { window.showNotification("Daily view limit (100) reached!", "error"); return; }
+      if (watched >= 100) { window.showNotification("Günlük reklam izleme limitine ulaşıldı!", "error"); return; }
 
       adWatchInProgress = true;
       const loadingScreen = document.getElementById('ad-loading-screen');
@@ -697,10 +681,10 @@
             dailyAdsWatched: watched + 1,
             lastAdWatchedDate: today
           }).then(() => {
-            window.showNotification("Success! Reward +$0.0020 added.", "success");
+            window.showNotification("Tebrikler! +$0.0020 bakiye eklendi.", "success");
           }).catch((err) => {
-             console.error("Reward error:", err);
-            window.showNotification("Failed to assign reward.", "error");
+             console.error("Reward assign crash:", err);
+            window.showNotification("Ödül yükleme başarısız.", "error");
           });
         }
       }, 1000);
@@ -709,7 +693,7 @@
     startApp();
   </script>
 
-  <!-- TAB NAVIGATION LOGIC -->
+  <!-- SEKMELER ARASI GEÇİŞ MOTORU -->
   <script>
     function switchTab(tabName) {
       ['store', 'earn', 'profile', 'admin'].forEach(tab => {
@@ -733,16 +717,14 @@
       });
     }
 
+    // Clipboard copy with dynamic feedback
     window.copyToClipboard = (text) => {
       const el = document.createElement('textarea');
       el.value = text; document.body.appendChild(el);
       el.select(); document.execCommand('copy');
       document.body.removeChild(el);
-      window.showNotification("URL copied to clipboard!", "success");
+      window.showNotification("Paylaşım linki panoya kopyalandı!", "success");
     };
   </script>
 </body>
 </html>
-
-
-```

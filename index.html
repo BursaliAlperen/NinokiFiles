@@ -4,13 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>NINOKI PREMIUM DOSYA DEPOSU</title>
-  
+
   <!-- TELEGRAM WEB APP SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  
-  <!-- RICHADS SDK -->
-  <script src="https://richinfo.co/richpartners/telegram/js/tg-ob.js"></script>
-  
+
   <!-- Tailwind CSS & FontAwesome -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -34,7 +31,6 @@
   </script>
 
   <style>
-    /* Tarayıcı kaydırma çubuklarını gizle */
     ::-webkit-scrollbar { display: none; }
     body { 
       -webkit-touch-callout: none; 
@@ -69,7 +65,7 @@
 </head>
 <body class="text-white min-h-screen flex flex-col justify-between overflow-x-hidden pb-28">
 
-  <!-- ÜST HEADER (Kullanıcı Bakiyesi ve Logo) -->
+  <!-- ÜST HEADER -->
   <header class="sticky top-0 z-40 glass-effect px-5 py-4 flex items-center justify-between shadow-lg shadow-black/40">
     <div class="flex items-center space-x-3">
       <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-[0_0_15px_rgba(37,99,235,0.4)] animate-pulse">
@@ -80,18 +76,16 @@
         <p class="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Premium Depo</p>
       </div>
     </div>
-
-    <!-- Canlı Bakiye Göstergesi -->
     <div class="bg-black/60 border border-green-500/20 rounded-full px-4 py-2 flex items-center space-x-2 shadow-inner">
       <i class="fa-solid fa-wallet text-green-400"></i>
       <span id="header-balance" class="text-sm font-bold text-green-400">$0.0000</span>
     </div>
   </header>
 
-  <!-- ANA PANEL İÇERİĞİ -->
+  <!-- ANA PANEL -->
   <main class="flex-1 p-5 max-w-lg mx-auto w-full">
 
-    <!-- TAB 1: MAĞAZA (STORE) -->
+    <!-- TAB 1: MAĞAZA -->
     <div id="tab-store" class="space-y-6">
       <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-950/40 to-blue-950/20 border border-blue-500/20 p-6 shadow-2xl">
         <div class="absolute -right-10 -top-10 w-32 h-32 bg-blue-500/15 blur-3xl rounded-full"></div>
@@ -109,7 +103,6 @@
         <span id="store-count" class="text-xs text-blue-400 font-semibold bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">0 dosya</span>
       </div>
 
-      <!-- Yüklenen Dosyalar Listesi -->
       <div id="files-list" class="grid grid-cols-1 gap-4">
         <div class="text-center py-12 glass-effect rounded-3xl">
           <div class="loader-spin mx-auto mb-3"></div>
@@ -118,7 +111,7 @@
       </div>
     </div>
 
-    <!-- TAB 2: KAZANÇ (EARN) -->
+    <!-- TAB 2: KAZANÇ -->
     <div id="tab-earn" class="space-y-6 hidden">
       <div class="text-center space-y-4 glass-effect p-8 rounded-3xl">
         <div class="w-20 h-20 bg-gradient-to-br from-green-500/20 to-emerald-500/10 rounded-full flex items-center justify-center mx-auto border border-green-500/30 shadow-[0_0_30px_rgba(16,185,129,0.15)] relative">
@@ -129,8 +122,7 @@
           <h3 class="text-xl font-bold text-white">Bakiye Kazanın</h3>
           <p class="text-xs text-gray-400 font-medium font-sans">Sponsor reklam görevlerini tamamlayarak cüzdan bakiyenizi anında güncelleyin.</p>
         </div>
-        
-        <!-- Günlük Limit -->
+
         <div class="pt-4 w-full">
           <div class="bg-black/40 rounded-2xl p-4 border border-white/5">
             <div class="flex justify-between text-xs mb-2">
@@ -144,15 +136,13 @@
         </div>
       </div>
 
-      <!-- REKLAM İZLEME TASKI -->
       <div class="glass-effect border-green-500/20 rounded-3xl p-5 flex items-center justify-between group hover:border-green-500/40 transition-all">
         <div class="space-y-1">
           <h5 class="font-bold text-sm text-white flex items-center gap-2">
-            RichAds Sponsor Videosu <span class="flex h-2 w-2 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span>
+            Sponsor Videosu <span class="flex h-2 w-2 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span>
           </h5>
           <p class="text-[11px] text-green-400 font-bold"><i class="fa-solid fa-coins mr-1"></i>Kazanç: +$0.0020</p>
         </div>
-        
         <button id="ad-button" class="bg-white text-black font-bold text-xs py-3 px-6 rounded-2xl flex items-center space-x-2 transition-transform active:scale-95 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
           <i class="fa-solid fa-play"></i>
           <span>İzle</span>
@@ -160,7 +150,7 @@
       </div>
     </div>
 
-    <!-- TAB 3: PROFİL (PROFILE) -->
+    <!-- TAB 3: PROFİL -->
     <div id="tab-profile" class="space-y-6 hidden">
       <div class="glass-effect rounded-3xl p-8 flex flex-col items-center text-center relative overflow-hidden">
         <div class="absolute top-0 w-full h-32 bg-gradient-to-b from-blue-600/10 to-transparent"></div>
@@ -171,7 +161,7 @@
           <h3 id="profile-name" class="font-bold text-lg text-white">Kullanıcı</h3>
           <p id="profile-id" class="text-xs text-blue-400 font-mono bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20 inline-block mt-2">ID: ---</p>
         </div>
-        
+
         <div class="w-full grid grid-cols-2 gap-4 pt-6 relative z-10">
           <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
             <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Mevcut Bakiye</span>
@@ -192,7 +182,7 @@
       </div>
     </div>
 
-    <!-- TAB 4: ADMİN PANELİ (ADMIN) -->
+    <!-- TAB 4: ADMİN -->
     <div id="tab-admin" class="space-y-6 hidden">
       <div class="bg-red-500/10 rounded-3xl p-6 border border-red-500/20">
         <div class="flex items-center space-x-3 mb-2">
@@ -202,7 +192,6 @@
         <p class="text-xs text-gray-400">Yeni Dropbox, Google Drive veya Mega linkleri tanımlayarak mağazaya ekleyebilirsiniz.</p>
       </div>
 
-      <!-- Yeni Dosya Ekleme Formu -->
       <div class="glass-effect rounded-3xl p-6">
         <h4 class="text-sm font-bold text-white mb-5 flex items-center gap-2"><i class="fa-solid fa-plus text-blue-400"></i> Yeni Bulut Paketi Yayınla</h4>
         <div class="space-y-4">
@@ -230,7 +219,6 @@
         </button>
       </div>
 
-      <!-- Dosya Yönetim Listesi -->
       <div class="glass-effect rounded-3xl p-6">
         <h4 class="text-xs font-bold uppercase text-gray-400 tracking-widest mb-4">Sistemdeki Aktif Paketler</h4>
         <div id="admin-files-list" class="space-y-3"></div>
@@ -239,7 +227,7 @@
 
   </main>
 
-  <!-- ALT NAVİGASYON (IOS FLOATING STYLE) -->
+  <!-- ALT NAVİGASYON -->
   <nav class="fixed bottom-6 left-6 right-6 z-40 glass-navigation rounded-3xl px-2 py-2 flex items-center justify-between shadow-2xl">
     <button onclick="switchTab('store')" id="nav-store" class="nav-btn flex-1 flex flex-col items-center py-2 text-blue-400 transition-colors rounded-2xl bg-white/5">
       <i class="fa-solid fa-shop text-lg mb-1"></i><span class="text-[9px] font-bold uppercase tracking-wider">Mağaza</span>
@@ -255,10 +243,10 @@
     </button>
   </nav>
 
-  <!-- TOAST BİLDİRİM KAPSAYICISI -->
+  <!-- TOAST -->
   <div id="toast-container" class="fixed top-20 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 w-full max-w-sm px-4 pointer-events-none"></div>
 
-  <!-- EMİN MİSİN POPUP'I (ONAY MODALI) -->
+  <!-- ONAY MODALI -->
   <div id="confirm-modal" class="hidden fixed inset-0 z-[1000] bg-black/85 backdrop-blur-sm flex items-center justify-center p-5 opacity-0 transition-opacity duration-300">
     <div id="confirm-box" class="bg-panelLighter border border-white/10 rounded-3xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300">
       <div class="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-4">
@@ -272,8 +260,8 @@
       </div>
     </div>
   </div>
-  
-  <!-- REKLAM İZLEME KİLİT PANELİ -->
+
+  <!-- REKLAM YÜKLEME EKRANI -->
   <div id="ad-loading-screen" class="hidden fixed inset-0 z-[99999] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-5 text-center">
     <div class="loader-spin mb-6"></div>
     <h2 class="text-white font-bold text-xl mb-2">Sponsor Reklamı Yayınlanıyor</h2>
@@ -285,13 +273,13 @@
     </div>
   </div>
 
-  <!-- VERİ TABANI VE SİSTEM ÇALIŞTIRICILARI -->
+  <!-- FIREBASE & UYGULAMA MANTIĞI -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
     import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, addDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
     import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
-    // Dynamic configuration setup
+    // ==================== YAPILANDIRMA ====================
     let firebaseConfig;
     try {
       firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
@@ -303,35 +291,43 @@
         appId: "1:210076686120:web:10773a358aa9a2989e221d"
       };
     } catch (e) {
-      console.error("Config load failed.");
+      console.error("Firebase config yüklenemedi:", e);
     }
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
+
     const appId = typeof __app_id !== 'undefined' ? __app_id : "ninokifiles";
     const ADMIN_TELEGRAM_ID = "7904032877";
 
-    window.currentUserData = { balance: 0.0, dailyAdsWatched: 0, lastAdWatchedDate: "", unlockedFiles: [] };
+    // ==================== GLOBAL DURUM ====================
+    window.currentUserData = { 
+      balance: 0.0, 
+      dailyAdsWatched: 0, 
+      lastAdWatchedDate: "", 
+      unlockedFiles: [] 
+    };
     window.dbFiles = [];
     window.tgId = null; 
-    window.itemToDelete = null; 
+    window.itemToDelete = null;
+    window.isAdmin = false;  // Admin durumunu global tut
 
-    // Toast Alert notification system
+    // ==================== TOAST SİSTEMİ ====================
     window.showNotification = function(msg, type = 'info') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
-      
+
       let icon = '<i class="fa-solid fa-circle-info text-blue-400"></i>';
       let border = 'border-blue-500/30';
       if(type === 'success') { icon = '<i class="fa-solid fa-circle-check text-green-400"></i>'; border = 'border-green-500/30'; }
       if(type === 'error') { icon = '<i class="fa-solid fa-circle-xmark text-red-400"></i>'; border = 'border-red-500/30'; }
-      
+
       toast.className = `bg-panelLighter/90 backdrop-blur-md border ${border} text-white text-xs px-4 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-[-20px] opacity-0 transition-all duration-300`;
       toast.innerHTML = `${icon} <span class="font-medium">${msg}</span>`;
-      
+
       container.appendChild(toast);
-      
+
       requestAnimationFrame(() => {
         toast.style.transform = 'translateY(0)';
         toast.style.opacity = '1';
@@ -344,10 +340,11 @@
       }, 3500);
     };
 
-    // Firebase Authentication flow
+    // ==================== ANA BAŞLATMA ====================
     async function startApp() {
       let tgName = "Telegram Kullanıcısı";
 
+      // Telegram WebApp bağlamını al
       try {
         if (window.Telegram && window.Telegram.WebApp) {
           const tg = window.Telegram.WebApp;
@@ -361,10 +358,10 @@
           }
         }
       } catch (e) {
-        console.warn("Telegram WebApp context down.");
+        console.warn("Telegram WebApp bağlamı bulunamadı:", e);
       }
 
-      // RULE 3: Perform Auth First before any query
+      // ÖNCE KİMLİK DOĞRULAMA (Firestore kuralları için ZORUNLU)
       try {
         if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
           await signInWithCustomToken(auth, __initial_auth_token);
@@ -372,91 +369,123 @@
           await signInAnonymously(auth);
         }
       } catch (err) {
-        console.warn("Initial authentication down, trying anonymous session:", err);
-        await signInAnonymously(auth);
+        console.warn("Özel token başarısız, anonim giriş deneniyor:", err);
+        try {
+          await signInAnonymously(auth);
+        } catch (err2) {
+          console.error("Kimlik doğrulama tamamen başarısız:", err2);
+          window.showNotification("Oturum başlatılamadı! Sayfayı yenileyin.", "error");
+          return;
+        }
       }
 
+      // Kimlik doğrulama durumunu dinle
       onAuthStateChanged(auth, async (user) => {
-        if (!user) return; // Prevent unauthorized data query crashes
-        
-        // Use user.uid for direct document authorization to prevent Permission Denied
-        const userId = user.uid; 
-        
-        document.getElementById('profile-id').textContent = `ID: ${window.tgId ? window.tgId : userId.substring(0,8)}`;
-        document.getElementById('profile-name').textContent = tgName;
-
-        if (window.tgId === ADMIN_TELEGRAM_ID || userId === ADMIN_TELEGRAM_ID) {
-          document.getElementById('nav-admin').classList.remove('hidden');
+        if (!user) {
+          console.error("Kullanıcı oturumu açılamadı");
+          window.showNotification("Oturum açılamadı!", "error");
+          return;
         }
 
-        // RULE 1: User data mapped to private path: /artifacts/{appId}/users/{userId}/profile/main
-        const userDocRef = doc(db, 'artifacts', appId, 'users', userId, 'profile', 'main');
-        
+        console.log("Oturum açıldı. UID:", user.uid);
+
+        // Admin kontrolü: SADECE tgId ile karşılaştır (Firebase UID != Telegram ID)
+        window.isAdmin = (window.tgId === ADMIN_TELEGRAM_ID);
+
+        if (window.isAdmin) {
+          document.getElementById('nav-admin').classList.remove('hidden');
+          console.log("Admin yetkisi tanımlandı.");
+        }
+
+        document.getElementById('profile-id').textContent = `ID: ${window.tgId ? window.tgId : user.uid.substring(0,8)}`;
+        document.getElementById('profile-name').textContent = tgName;
+
+        // ==================== KULLANICI VERİSİ ====================
+        // DÜZELTME: Daha basit ve güvenilir koleksiyon yapısı
+        const userDocRef = doc(db, 'users', user.uid);
+
         onSnapshot(userDocRef, async (docSnap) => {
           const today = new Date().toDateString();
           if (docSnap.exists()) {
             const data = docSnap.data();
+            // Günlük limit sıfırlama kontrolü
             if (data.lastAdWatchedDate !== today) {
-              window.currentUserData = { ...data, dailyAdsWatched: 0, lastAdWatchedDate: today };
+              window.currentUserData = { 
+                ...data, 
+                dailyAdsWatched: 0, 
+                lastAdWatchedDate: today 
+              };
               await setDoc(userDocRef, window.currentUserData, { merge: true });
             } else {
               window.currentUserData = data;
             }
           } else {
-            // Document creation automatically builds the "users" collection inside Firestore
+            // İlk kez giriş - varsayılan veri oluştur
             window.currentUserData = { 
               balance: 0.0, 
               dailyAdsWatched: 0, 
               lastAdWatchedDate: today, 
               unlockedFiles: [],
-              tgName: tgName 
+              tgName: tgName,
+              tgId: window.tgId || null,
+              createdAt: new Date().toISOString()
             };
-            await setDoc(userDocRef, window.currentUserData, { merge: true });
+            await setDoc(userDocRef, window.currentUserData);
+            console.log("Yeni kullanıcı profili oluşturuldu.");
           }
           syncUI();
           renderFiles();
         }, (err) => {
-          console.error("Profile snapshot failure:", err);
+          console.error("Kullanıcı verisi dinleme hatası:", err);
+          window.showNotification("Profil verisi yüklenemedi.", "error");
         });
 
-        // RULE 1: Public files mapped to: /artifacts/{appId}/public/data/files
-        const filesColRef = collection(db, 'artifacts', appId, 'public', 'data', 'files');
+        // ==================== DOSYA LİSTESİ ====================
+        // DÜZELTME: Daha basit koleksiyon yapısı - doğrudan root'ta
+        const filesColRef = collection(db, 'files');
+
         onSnapshot(filesColRef, (snap) => {
           window.dbFiles = [];
           snap.forEach(d => window.dbFiles.push({ id: d.id, ...d.data() }));
-          // Memory sorting to bypass Rule 2 query boundaries
           window.dbFiles.sort((a,b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
           renderFiles();
         }, (err) => {
-          console.error("Collection snapshot error:", err);
-          window.showNotification("Bulut deposu bağlantı hatası.", "error");
+          console.error("Dosya koleksiyonu dinleme hatası:", err);
+          window.showNotification("Dosya deposuna bağlanılamadı.", "error");
+          // Hata durumunda boş liste göster
+          document.getElementById('files-list').innerHTML = `
+            <div class="text-center py-12 glass-effect rounded-3xl border border-red-500/20">
+              <i class="fa-solid fa-triangle-exclamation text-red-400 text-2xl mb-3"></i>
+              <p class="text-sm text-gray-400 font-medium">Depo bağlantısı kurulamadı.</p>
+              <p class="text-[10px] text-gray-500 mt-1">Firestore kurallarını kontrol edin.</p>
+            </div>`;
         });
       });
     }
 
+    // ==================== UI SENKRONİZASYONU ====================
     function syncUI() {
       const data = window.currentUserData;
-      document.getElementById('header-balance').textContent = `$${data.balance.toFixed(4)}`;
-      document.getElementById('profile-balance').textContent = `$${data.balance.toFixed(4)}`;
+      document.getElementById('header-balance').textContent = `$${(data.balance || 0).toFixed(4)}`;
+      document.getElementById('profile-balance').textContent = `$${(data.balance || 0).toFixed(4)}`;
       document.getElementById('profile-unlocked-count').textContent = `${(data.unlockedFiles || []).length}`;
-      
+
       const count = data.dailyAdsWatched || 0;
       document.getElementById('daily-ads-text').textContent = `${count} / 100 İzleme`;
-      document.getElementById('daily-ads-bar').style.width = `${(count / 100) * 100}%`;
+      document.getElementById('daily-ads-bar').style.width = `${Math.min((count / 100) * 100, 100)}%`;
     }
 
-    // Dynamic Card Listing System
+    // ==================== DOSYA RENDER ====================
     function renderFiles() {
       const storeDiv = document.getElementById('files-list');
       const adminDiv = document.getElementById('admin-files-list');
       const unlockedDiv = document.getElementById('unlocked-files-list');
-      
+
       document.getElementById('store-count').textContent = `${window.dbFiles.length} paket`;
 
-      // Gorgeous "No files found" fallback
       if (window.dbFiles.length === 0) {
         const emptyStateHTML = `
-          <div class="text-center py-16 glass-effect rounded-3xl border border-white/5 animate-fade-in">
+          <div class="text-center py-16 glass-effect rounded-3xl border border-white/5">
             <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/10">
               <i class="fa-solid fa-box-open text-gray-500 text-2xl"></i>
             </div>
@@ -516,21 +545,21 @@
             </div>`;
         }
 
-        if (window.tgId === ADMIN_TELEGRAM_ID || auth.currentUser?.uid === ADMIN_TELEGRAM_ID) {
+        if (window.isAdmin) {
           adminHtml += `
             <div class="bg-black/50 p-4 rounded-2xl border border-white/5 flex justify-between items-center">
               <div class="min-w-0 pr-4">
                 <p class="text-sm font-bold text-gray-200 truncate">${f.name}</p>
                 <p class="text-[10px] text-blue-400 mt-0.5">Fiyat: $${f.price}</p>
               </div>
-              <button onclick="openConfirmModal('${f.id}', '${f.name.replace(/'/g, "\\'")}')" class="bg-red-500/10 text-red-400 p-3 rounded-xl hover:bg-red-500 hover:text-white transition active:scale-95 border border-red-500/20"><i class="fa-regular fa-trash-can"></i></button>
+              <button onclick="openConfirmModal('${f.id}', '${f.name.replace(/'/g, "\'")}')" class="bg-red-500/10 text-red-400 p-3 rounded-xl hover:bg-red-500 hover:text-white transition active:scale-95 border border-red-500/20"><i class="fa-regular fa-trash-can"></i></button>
             </div>`;
         }
       });
 
       storeDiv.innerHTML = storeHtml;
-      
-      if (window.tgId === ADMIN_TELEGRAM_ID || auth.currentUser?.uid === ADMIN_TELEGRAM_ID) {
+
+      if (window.isAdmin) {
          adminDiv.innerHTML = adminHtml;
       }
 
@@ -541,75 +570,94 @@
       }
     }
 
-    // Purchase Process
+    // ==================== SATIN ALMA ====================
     window.buyFile = async (fileId, price) => {
       const user = auth.currentUser;
-      if (!user) return;
-      if (window.currentUserData.balance < price) { window.showNotification("Yetersiz bakiye! Reklam izleyerek kredi kazanın.", "error"); return; }
-      
+      if (!user) { 
+        window.showNotification("Oturum doğrulanıyor, lütfen bekleyin...", "error"); 
+        return; 
+      }
+      if ((window.currentUserData.balance || 0) < price) { 
+        window.showNotification("Yetersiz bakiye! Reklam izleyerek kredi kazanın.", "error"); 
+        return; 
+      }
+
       try {
-        const ref = doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'main');
+        const ref = doc(db, 'users', user.uid);
+        const newBalance = Number((window.currentUserData.balance - price).toFixed(6));
+        const newUnlocked = [...(window.currentUserData.unlockedFiles || []), fileId];
+
         await updateDoc(ref, {
-          balance: Number((window.currentUserData.balance - price).toFixed(6)),
-          unlockedFiles: [...(window.currentUserData.unlockedFiles || []), fileId]
+          balance: newBalance,
+          unlockedFiles: newUnlocked
         });
         window.showNotification("🎉 Dosya kilidi açıldı! Profil sekmesini kontrol edin.", "success");
       } catch (err) {
-        console.error("Purchasing fault:", err);
-        window.showNotification("Satın alma işlemi tamamlanamadı.", "error");
+        console.error("Satın alma hatası:", err);
+        window.showNotification("Satın alma işlemi tamamlanamadı: " + err.message, "error");
       }
     };
 
-    // Auto Collection & Document creation for public files
+    // ==================== DOSYA YAYINLA (Admin) ====================
     window.publishFile = async () => {
+      if (!window.isAdmin) {
+        window.showNotification("Yetkisiz işlem!", "error");
+        return;
+      }
+
       const btn = document.getElementById('publishBtn');
       const name = document.getElementById('admin-file-name').value.trim();
       const url = document.getElementById('admin-file-url').value.trim();
       const price = Number(document.getElementById('admin-file-price').value);
       const discount = document.getElementById('admin-file-discount').value ? Number(document.getElementById('admin-file-discount').value) : null;
 
-      if (!name || !url || isNaN(price)) { 
-        window.showNotification("Lütfen dosya adı, link ve fiyat alanlarını doldurun.", "error"); 
+      if (!name || !url || isNaN(price) || price < 0) { 
+        window.showNotification("Lütfen dosya adı, link ve geçerli bir fiyat girin.", "error"); 
         return; 
       }
-      
+
       try {
         btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Yayınlanıyor...`;
         btn.disabled = true;
 
-        // Writing triggers the automatic creation of collections
-        const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'files');
+        // DÜZELTME: Basit koleksiyon yapısı
+        const collectionRef = collection(db, 'files');
         await addDoc(collectionRef, {
-          name, 
-          url, 
-          price, 
-          discountPrice: discount, 
+          name: name, 
+          url: url, 
+          price: price, 
+          discountPrice: discount || 0, 
           createdAt: new Date().toISOString()
         });
-        
+
         window.showNotification("✅ Dosya başarıyla depoya eklendi!", "success");
-        
+
         document.getElementById('admin-file-name').value = ''; 
         document.getElementById('admin-file-url').value = '';
         document.getElementById('admin-file-price').value = '';
         document.getElementById('admin-file-discount').value = '';
       } catch(err) {
-        console.error("Writing fault:", err);
-        window.showNotification(`Dosya eklenemedi! Yetki sorunu.`, "error");
+        console.error("Yayınlama hatası:", err);
+        window.showNotification("Dosya eklenemedi: " + err.message, "error");
       } finally {
         btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Dosya Paketini Yayınla`;
         btn.disabled = false;
       }
     };
 
+    // ==================== SİLME MODALİ ====================
     window.openConfirmModal = (fileId, fileName) => {
+      if (!window.isAdmin) {
+        window.showNotification("Yetkisiz işlem!", "error");
+        return;
+      }
       window.itemToDelete = fileId;
       document.getElementById('confirm-modal-text').innerHTML = `<b>${fileName}</b> dosyasını silmek istediğinize emin misiniz?`;
-      
+
       const modal = document.getElementById('confirm-modal');
       const box = document.getElementById('confirm-box');
       modal.classList.remove('hidden');
-      
+
       requestAnimationFrame(() => {
         modal.classList.remove('opacity-0');
         box.classList.remove('scale-95');
@@ -620,10 +668,10 @@
       window.itemToDelete = null;
       const modal = document.getElementById('confirm-modal');
       const box = document.getElementById('confirm-box');
-      
+
       modal.classList.add('opacity-0');
       box.classList.add('scale-95');
-      
+
       setTimeout(() => {
         modal.classList.add('hidden');
       }, 300);
@@ -631,40 +679,58 @@
 
     window.executeDelete = async () => {
       if(!window.itemToDelete) return;
+      if (!window.isAdmin) {
+        window.showNotification("Yetkisiz işlem!", "error");
+        return;
+      }
+
       const id = window.itemToDelete;
       window.closeConfirmModal();
 
       try {
-        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'files', id));
+        await deleteDoc(doc(db, 'files', id));
         window.showNotification("🗑️ Dosya kalıcı olarak silindi.", "success");
       } catch(err) {
-        console.error("Deletion error:", err);
-        window.showNotification("Silme işlemi başarısız.", "error");
+        console.error("Silme hatası:", err);
+        window.showNotification("Silme işlemi başarısız: " + err.message, "error");
       }
     };
 
-    // Watch video campaign process
+    // ==================== REKLAM İZLEME ====================
     let adWatchInProgress = false;
 
     document.getElementById('ad-button').addEventListener('click', () => {
       const user = auth.currentUser;
-      if (!user) { window.showNotification("Oturum doğrulanıyor, lütfen bekleyin...", "error"); return; }
+      if (!user) { 
+        window.showNotification("Oturum doğrulanıyor, lütfen bekleyin...", "error"); 
+        return; 
+      }
       if (adWatchInProgress) return;
 
       const today = new Date().toDateString();
       let watched = window.currentUserData.dailyAdsWatched || 0;
       if (window.currentUserData.lastAdWatchedDate !== today) watched = 0;
-      if (watched >= 100) { window.showNotification("Günlük reklam izleme limitine ulaşıldı!", "error"); return; }
+      if (watched >= 100) { 
+        window.showNotification("Günlük reklam izleme limitine ulaşıldı!", "error"); 
+        return; 
+      }
 
       adWatchInProgress = true;
       const loadingScreen = document.getElementById('ad-loading-screen');
       const timerDisplay = document.getElementById('ad-timer');
       loadingScreen.classList.remove('hidden');
-      
+
       let timeLeft = 12;
       timerDisplay.textContent = timeLeft;
 
-      try { window.richadsController.triggerInterstitialVideo().catch(()=>{}); } catch (err) {}
+      // DÜZELTME: RichAds SDK yoksa sessizce devam et (hata fırlatma)
+      try { 
+        if (window.richadsController && typeof window.richadsController.triggerInterstitialVideo === 'function') {
+          window.richadsController.triggerInterstitialVideo().catch(()=>{}); 
+        }
+      } catch (err) { 
+        console.warn("RichAds SDK bulunamadı, simülasyon modu:");
+      }
 
       const countdownInterval = setInterval(() => {
         timeLeft--;
@@ -675,25 +741,28 @@
           loadingScreen.classList.add('hidden');
           adWatchInProgress = false;
 
-          const ref = doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'main');
+          const ref = doc(db, 'users', user.uid);
+          const newBalance = Number((window.currentUserData.balance + 0.002).toFixed(6));
+
           updateDoc(ref, {
-            balance: Number((window.currentUserData.balance + 0.002).toFixed(6)),
+            balance: newBalance,
             dailyAdsWatched: watched + 1,
             lastAdWatchedDate: today
           }).then(() => {
             window.showNotification("Tebrikler! +$0.0020 bakiye eklendi.", "success");
           }).catch((err) => {
-             console.error("Reward assign crash:", err);
-            window.showNotification("Ödül yükleme başarısız.", "error");
+            console.error("Ödül atama hatası:", err);
+            window.showNotification("Ödül yükleme başarısız: " + err.message, "error");
           });
         }
       }, 1000);
     });
 
+    // Uygulamayı başlat
     startApp();
   </script>
 
-  <!-- SEKMELER ARASI GEÇİŞ MOTORU -->
+  <!-- SEKME DEĞİŞTİRME -->
   <script>
     function switchTab(tabName) {
       ['store', 'earn', 'profile', 'admin'].forEach(tab => {
@@ -717,14 +786,27 @@
       });
     }
 
-    // Clipboard copy with dynamic feedback
     window.copyToClipboard = (text) => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          window.showNotification("Paylaşım linki panoya kopyalandı!", "success");
+        }).catch(() => {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    };
+
+    function fallbackCopy(text) {
       const el = document.createElement('textarea');
-      el.value = text; document.body.appendChild(el);
-      el.select(); document.execCommand('copy');
+      el.value = text; 
+      document.body.appendChild(el);
+      el.select(); 
+      document.execCommand('copy');
       document.body.removeChild(el);
       window.showNotification("Paylaşım linki panoya kopyalandı!", "success");
-    };
+    }
   </script>
 </body>
 </html>
